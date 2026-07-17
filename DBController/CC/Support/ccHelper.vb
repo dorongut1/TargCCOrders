@@ -2850,9 +2850,12 @@ Public Class ccHelper
       Dim pStackFrame = (New StackTrace(True).GetFrame(iCntr)) 
       If pStackFrame Is Nothing Then Exit Do 
       Dim pMethodBase As Reflection.MethodBase = pStackFrame.GetMethod() 
-      If Not (pMethodBase Is Nothing) Then 
-        If pMethodBase.DeclaringType?.Namespace.StartsWith("System.", StringComparison.OrdinalIgnoreCase) Then Continue Do 
-        If pMethodBase.DeclaringType?.Namespace.StartsWith("Microsoft.", StringComparison.OrdinalIgnoreCase) Then Continue Do 
+      If Not (pMethodBase Is Nothing) Then
+        ' DeclaringType or its Namespace can be Nothing for ASP.NET Core dynamic-invoker frames;
+        ' guard both before calling StartsWith so the stack walk never NREs during fault logging.
+        Dim pNamespace As String = If(pMethodBase.DeclaringType?.Namespace, "")
+        If pNamespace.StartsWith("System.", StringComparison.OrdinalIgnoreCase) Then Continue Do
+        If pNamespace.StartsWith("Microsoft.", StringComparison.OrdinalIgnoreCase) Then Continue Do
         Dim pLine As String = $"    {iCntr.ToString().PadLeft(2, " "c)}:{pMethodBase.DeclaringType?.FullName()}.{pMethodBase.Name}, File: {pStackFrame.GetFileName()}, Line: {pStackFrame.GetFileLineNumber()}" 
         If pLine.Contains("CC\Support\clsFault.vb") Then Continue Do 
         pStackTrace.AppendLine(pLine) 

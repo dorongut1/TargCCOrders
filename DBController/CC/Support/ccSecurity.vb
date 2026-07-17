@@ -3505,14 +3505,24 @@ Public Class ccSecurity
     'CheckLoginID - Check that we didn't get 0   
     If rRequester.LoggedLoginID = 0 Then 
       'No LoginID received       
-      If rRequester.UserName.Equals("SecurityExempt", StringComparison.OrdinalIgnoreCase) AndAlso (New StackFrame(3)).GetMethod().DeclaringType.Name() & "_" & (New StackFrame(3)).GetMethod().Name = "clsFault_CreateLoggedAlert" Then 
-        Return pFault.SetOK() 
-      ElseIf rRequester.UserName.Equals("SecurityExempt", StringComparison.OrdinalIgnoreCase) AndAlso (New StackFrame(3)).GetMethod().DeclaringType.Name() & "_" & (New StackFrame(3)).GetMethod().Name = "csFunctions_SystemDefaultColFillByGroup" Then 
-        'get configs for WSController 
-        Return pFault.SetOK() 
-      Else 
-        Return pFault.LogFreeTextFault(85, String.Format("fAccessingComputer.LoggedLoginID:{0}", rRequester.LoggedLoginID), pFunctionParameters, "TRGT-110410-1227", rRequester) 
-      End If 
+      ' StackFrame(3).GetMethod() can be Nothing under ASP.NET Core dynamic invokers — resolve it safely.
+      Dim pShallowCaller As String = ""
+      If rRequester.UserName.Equals("SecurityExempt", StringComparison.OrdinalIgnoreCase) Then
+        Try
+          Dim pM3 As System.Reflection.MethodBase = (New StackFrame(3)).GetMethod()
+          If pM3 IsNot Nothing AndAlso pM3.DeclaringType IsNot Nothing Then pShallowCaller = pM3.DeclaringType.Name() & "_" & pM3.Name
+        Catch
+          pShallowCaller = ""
+        End Try
+      End If
+      If rRequester.UserName.Equals("SecurityExempt", StringComparison.OrdinalIgnoreCase) AndAlso pShallowCaller = "clsFault_CreateLoggedAlert" Then
+        Return pFault.SetOK()
+      ElseIf rRequester.UserName.Equals("SecurityExempt", StringComparison.OrdinalIgnoreCase) AndAlso pShallowCaller = "csFunctions_SystemDefaultColFillByGroup" Then
+        'get configs for WSController
+        Return pFault.SetOK()
+      Else
+        Return pFault.LogFreeTextFault(85, String.Format("fAccessingComputer.LoggedLoginID:{0}", rRequester.LoggedLoginID), pFunctionParameters, "TRGT-110410-1227", rRequester)
+      End If
     End If 
  
     If rRequester.LoggedLoginID < 0 Then 
@@ -3546,22 +3556,31 @@ Public Class ccSecurity
       Return pFault.LogFreeTextFault(145, "vEntryPoint=" & vEntryPoint, pFunctionParameters, "TRGT-180914-1642", rRequester) 
     End If 
  
-    If Debugger.IsAttached Then 
-      'do a deep analysis 
-      Dim pEntryPoint As String = vEntryPoint 
-      If pEntryPoint.Contains(":"c) Then pEntryPoint = pEntryPoint.Split(":"c)(0) 
-      Dim pCalculatedEntryPoint As String = "" 
-      If vEntryPoint.StartsWith("ext_", StringComparison.OrdinalIgnoreCase) Then 
-        pCalculatedEntryPoint = "ext_" & (New StackFrame(3)).GetMethod().DeclaringType.Name & "_" & (New StackFrame(3)).GetMethod().Name 
-      Else 
-        Dim pFunction As String = (New StackFrame(2)).GetMethod().Name 
-        If pFunction = ".ctor" Then pFunction = "New" 
-        pCalculatedEntryPoint = (New StackFrame(2)).GetMethod().DeclaringType.Name & "_" & pFunction 
-      End If 
-      If Not pEntryPoint.Equals(pCalculatedEntryPoint, StringComparison.OrdinalIgnoreCase) Then 
-        Return pFault.LogFreeTextFault(145, $"vEntryPoint - received:{vEntryPoint}, calculated:{pCalculatedEntryPoint}", pFunctionParameters, "TRGT-220701-1552", rRequester) 
-      End If 
-    End If 
+    If Debugger.IsAttached Then
+      'do a deep analysis (best-effort). StackFrame.GetMethod() is unreliable under ASP.NET Core
+      'dynamic action invokers, so only enforce the integrity check when it resolves.
+      Dim pEntryPoint As String = vEntryPoint
+      If pEntryPoint.Contains(":"c) Then pEntryPoint = pEntryPoint.Split(":"c)(0)
+      Dim pCalculatedEntryPoint As String = ""
+      Try
+        If vEntryPoint.StartsWith("ext_", StringComparison.OrdinalIgnoreCase) Then
+          Dim pM3 As System.Reflection.MethodBase = (New StackFrame(3)).GetMethod()
+          If pM3 IsNot Nothing AndAlso pM3.DeclaringType IsNot Nothing Then pCalculatedEntryPoint = "ext_" & pM3.DeclaringType.Name & "_" & pM3.Name
+        Else
+          Dim pM2 As System.Reflection.MethodBase = (New StackFrame(2)).GetMethod()
+          If pM2 IsNot Nothing AndAlso pM2.DeclaringType IsNot Nothing Then
+            Dim pFunction As String = pM2.Name
+            If pFunction = ".ctor" Then pFunction = "New"
+            pCalculatedEntryPoint = pM2.DeclaringType.Name & "_" & pFunction
+          End If
+        End If
+      Catch
+        pCalculatedEntryPoint = ""
+      End Try
+      If Not String.IsNullOrEmpty(pCalculatedEntryPoint) AndAlso Not pEntryPoint.Equals(pCalculatedEntryPoint, StringComparison.OrdinalIgnoreCase) Then
+        Return pFault.LogFreeTextFault(145, $"vEntryPoint - received:{vEntryPoint}, calculated:{pCalculatedEntryPoint}", pFunctionParameters, "TRGT-220701-1552", rRequester)
+      End If
+    End If
   
     Dim pProcess As String = vProcess.FastToString()  
   

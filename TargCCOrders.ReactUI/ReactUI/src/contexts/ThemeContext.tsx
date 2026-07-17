@@ -90,7 +90,7 @@ export function AppThemeProvider({ children }: { children: ReactNode }) {
         components: {
           MuiCssBaseline: {
             styleOverrides: {
-              '@import': "url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap')",
+              // הפונט נטען מ-index.html (link) — @import בתוך emotion נחסם בגלל סדר כללי CSS
               body: {
                 scrollbarWidth: 'thin',
                 scrollbarColor: isDarkMode ? '#475569 transparent' : '#CBD5E1 transparent',

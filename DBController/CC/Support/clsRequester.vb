@@ -517,8 +517,21 @@ Public Class clsRequester
     _CallingApplication = System.Reflection.Assembly.GetEntryAssembly?.GetName.Name 
     _CallingApplicationVersion = "n/a" 
     _CallingFunctionWithinApplication = "n/a" 
-    _EntryFunction = (New StackFrame(2)).GetMethod().DeclaringType.Name() & "_" & (New StackFrame(2)).GetMethod().Name 
-    If _EntryFunction.EndsWith("Internal", StringComparison.OrdinalIgnoreCase) Then _EntryFunction = _EntryFunction.Substring(0, _EntryFunction.Length - 8) 
+    ' StackFrame(2).GetMethod() may return Nothing in optimized / async hosting contexts
+    ' (e.g. ASP.NET Core). Guard against it so the SecurityExempt requester can be built
+    ' from a Web API request instead of throwing NullReferenceException.
+    Dim pCallerMethod As System.Reflection.MethodBase = Nothing
+    Try
+      pCallerMethod = (New StackFrame(2)).GetMethod()
+    Catch
+      pCallerMethod = Nothing
+    End Try
+    If pCallerMethod IsNot Nothing AndAlso pCallerMethod.DeclaringType IsNot Nothing Then
+      _EntryFunction = pCallerMethod.DeclaringType.Name() & "_" & pCallerMethod.Name
+    Else
+      _EntryFunction = "External"
+    End If
+    If _EntryFunction.EndsWith("Internal", StringComparison.OrdinalIgnoreCase) Then _EntryFunction = _EntryFunction.Substring(0, _EntryFunction.Length - 8)
     
   End Sub 
  

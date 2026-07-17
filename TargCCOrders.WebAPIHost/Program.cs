@@ -5,14 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
-// ═══════════════════════════════════════════════════════════════════
-// TargCCOrders WebAPI Host – ASP.NET Core 8
+// ----
+// TargCCOrders WebAPI Host - ASP.NET Core 8
 // Bootstraps the generated Controllers + DTOs from WebAPI/ library
-// ═══════════════════════════════════════════════════════════════════
+// ----
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ──────────── Serilog ────────────
+// ---- Serilog ----
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
@@ -22,12 +22,12 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-// ──────────── Configuration ────────────
+// ---- Configuration ----
 var jwtKey = builder.Configuration["Jwt:AdminKey"]
     ?? throw new InvalidOperationException("Missing Jwt:AdminKey in configuration");
 var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
 
-// ──────────── Services ────────────
+// ---- Services ----
 
 // Controllers + JSON
 builder.Services.AddControllers()
@@ -60,7 +60,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminUI", policy => policy.RequireAuthenticatedUser());
 });
 
-// CORS – allow React dev server + production origins
+// CORS - allow React dev server + production origins
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactDev", policy =>
@@ -114,7 +114,7 @@ builder.Services.AddResponseCompression(opts =>
     opts.EnableForHttps = true;
 });
 
-// Rate limiting — protects the login endpoint from brute-force
+// Rate limiting - protects the login endpoint from brute-force
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -129,7 +129,7 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
-// ──────────── DB Connection (VB.NET layer) ────────────
+// ---- DB Connection (VB.NET layer) ----
 // The VB.NET DBController builds its own connection string from the
 // app.config appSetting "TargCCOrders.Controller" (Server~Database[~MaxPool[~User~Pwd]]).
 // The ConnectionStrings section in appsettings.json is NOT used by the data layer.
@@ -138,13 +138,65 @@ builder.Services.AddRateLimiter(options =>
     var controllerSetting = System.Configuration.ConfigurationManager.AppSettings["TargCCOrders.Controller"];
     if (string.IsNullOrWhiteSpace(controllerSetting))
         throw new InvalidOperationException(
-            "Missing appSetting 'TargCCOrders.Controller' in app.config — the DBController cannot connect to the database without it.");
-    Log.Information("DBController target: {Controller}", controllerSetting.Split('~')[0] + "~" + controllerSetting.Split('~').ElementAtOrDefault(1));
+            "Missing appSetting 'TargCCOrders.Controller' in app.config - the DBController cannot connect to the database without it.");
+
+    var parts = controllerSetting.Split('~');
+    var dbServer = parts.ElementAtOrDefault(0) ?? "";
+    var dbName = parts.ElementAtOrDefault(1) ?? "";
+    Log.Information("DBController target: {Server} / {Database}", dbServer, dbName);
+
+    // -- Clean startup DB probe ----
+    // Opens a real SqlConnection so the ACTUAL SQL error (wrong instance /
+    // missing database / auth failure) is logged clearly at startup, instead
+    // of surfacing later as a NullReferenceException or a fault-logging
+    // recursion / stack overflow inside the TargCC data layer.
+    try
+    {
+        var sqlUser = parts.ElementAtOrDefault(3);
+        var sqlPwd = parts.ElementAtOrDefault(4);
+        var csb = new System.Data.SqlClient.SqlConnectionStringBuilder
+        {
+            DataSource = dbServer,
+            InitialCatalog = dbName,
+            ConnectTimeout = 5,
+            TrustServerCertificate = true
+        };
+        if (!string.IsNullOrWhiteSpace(sqlUser))
+        {
+            csb.UserID = sqlUser;
+            csb.Password = sqlPwd ?? "";
+        }
+        else
+        {
+            csb.IntegratedSecurity = true;
+        }
+
+        using var probe = new System.Data.SqlClient.SqlConnection(csb.ConnectionString);
+        probe.Open();
+        using (var cmd = probe.CreateCommand())
+        {
+            cmd.CommandText = "SELECT COUNT(*) FROM sys.tables";
+            var tableCount = cmd.ExecuteScalar();
+            Log.Information("- Database connection OK - {Server}/{Database}, {Tables} tables visible.",
+                dbServer, dbName, tableCount);
+        }
+    }
+    catch (Exception dbEx)
+    {
+        Log.Fatal(dbEx,
+            "- CANNOT CONNECT TO DATABASE ({Server}/{Database}). " +
+            "Fix app.config 'TargCCOrders.Controller' (Server~Database~pool[~user~pwd]). " +
+            "Common causes: SQL Server not running, wrong instance name (e.g. needs '.\\SQLEXPRESS'), " +
+            "database does not exist, or the Windows/SQL login has no access. Actual error: {Error}",
+            dbServer, dbName, dbEx.Message);
+        // Stop cleanly instead of letting the request-time recursion crash the process.
+        return;
+    }
 }
 
 var app = builder.Build();
 
-// ──────────── Middleware Pipeline ────────────
+// ---- Middleware Pipeline ----
 
 // Global exception handler
 app.UseExceptionHandler(errorApp =>
@@ -208,7 +260,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// SPA fallback – return index.html for unmatched routes (React Router)
+// SPA fallback - return index.html for unmatched routes (React Router)
 app.MapFallbackToFile("index.html");
 
 Log.Information("TargCCOrders API starting on {Urls}", string.Join(", ", app.Urls));

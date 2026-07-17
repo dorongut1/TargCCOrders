@@ -636,14 +636,51 @@
     Return Me  
   End Function  
   
-  Private Sub LoadFunctionProperties()  
-    _FaultingApplication = (New StackFrame(2)).GetMethod().DeclaringType.Namespace()  
-    _FaultingClass = (New StackFrame(2)).GetMethod().DeclaringType.Name()  
-    _FaultingFunction = (New StackFrame(2)).GetMethod().Name  
-  End Sub  
+  Private Sub LoadFunctionProperties()
+    ' StackFrame(2).GetMethod() returns Nothing when the caller frame is an ASP.NET Core
+    ' dynamic action invoker. Guard so fault logging never NREs and masks the real error.
+    Dim pMethod As System.Reflection.MethodBase = Nothing
+    Try
+      pMethod = (New StackFrame(2)).GetMethod()
+    Catch
+      pMethod = Nothing
+    End Try
+    If pMethod IsNot Nothing AndAlso pMethod.DeclaringType IsNot Nothing Then
+      _FaultingApplication = pMethod.DeclaringType.Namespace()
+      _FaultingClass = pMethod.DeclaringType.Name()
+      _FaultingFunction = pMethod.Name
+    Else
+      _FaultingApplication = "WebAPI"
+      _FaultingClass = "External"
+      _FaultingFunction = "External"
+    End If
+  End Sub
   
-  Private Sub CreateLoggedAlert(ByVal vRequester As clsRequester) 
-    Dim pLoggedAlert As New csLoggedAlert 
+  ' Re-entrancy guard (per-thread): if writing a fault to the database itself
+  ' raises another fault, TargCC would call CreateLoggedAlert again — which opens
+  ' another SQL connection — recursing until the process dies with a StackOverflow.
+  ' When already inside CreateLoggedAlert on this thread, write the fault to the
+  ' text log instead of the DB, so the ORIGINAL error survives and is visible.
+  <ThreadStatic> Private Shared _InCreateLoggedAlert As Boolean
+
+  Private Sub CreateLoggedAlert(ByVal vRequester As clsRequester)
+    If _InCreateLoggedAlert Then
+      Try
+        Tools.LogToTextFile.WriteMessage(Environment.NewLine & "[Re-entrant fault suppressed to avoid DB recursion]" & Environment.NewLine & StringForMessageBox, "CC-RECURSION")
+      Catch
+      End Try
+      Return
+    End If
+    _InCreateLoggedAlert = True
+    Try
+      CreateLoggedAlertInternal(vRequester)
+    Finally
+      _InCreateLoggedAlert = False
+    End Try
+  End Sub
+
+  Private Sub CreateLoggedAlertInternal(ByVal vRequester As clsRequester)
+    Dim pLoggedAlert As New csLoggedAlert
  
     Dim pRequester As clsRequester 
     If vRequester Is Nothing OrElse (vRequester.LoggedLoginID = 0) OrElse (vRequester.UserID = 0 AndAlso vRequester.UserName = "") Then 
