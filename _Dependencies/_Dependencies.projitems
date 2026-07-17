@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>c7d76121-0146-496a-8898-f6635c5cc7f6</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>_Dependencies</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)AuditCommon.dll" />
+    <None Include="$(MSBuildThisFileDirectory)AuditCommon.pdb" />
+    <None Include="$(MSBuildThisFileDirectory)TargControllerCreator.exe" />
+    <None Include="$(MSBuildThisFileDirectory)TargetSMS019.dll" />
+    <None Include="$(MSBuildThisFileDirectory)TargetSMS019.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)AuditCommon.Readme.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)TargetEncryptor.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)TargetSMS019.ReadMe.txt" />
+  </ItemGroup>
+</Project>

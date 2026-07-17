@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="vb" CodeBehind="_Tutorial.asmx.vb" Class="TargCCOrders.WS.TutorialWS.Tutorial" %>

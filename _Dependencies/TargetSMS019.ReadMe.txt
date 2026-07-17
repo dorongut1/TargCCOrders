@@ -1,0 +1,5 @@
+﻿Ver 1.0.0.2 (13 Feb 23)
+- Forced TLS 1.2
+
+Ver 1.0.0.1 (10 Jan 21)
+- Initial Release

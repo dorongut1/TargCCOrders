@@ -1,0 +1,168 @@
+Ver 2.3.5.4 (24 Apr 2025)
+ - Stopped auditing:
+    - LastAccessTime & LoggedLoginID in c_UserPermission
+ - upgraded framework to 4.7.2
+
+Ver 2.3.5.3 (17 Jan 2020)
+ - Changed method of checking for object types to increase speed
+
+Ver 2.3.5.1 (16 Jan 2020)
+ - Save DateTimeOffset values as ToString("dd-MMM-yyyy HH:mm:ss.fff zzz", New System.Globalization.CultureInfo("en-US"))
+
+Ver 2.3.5.0 (08 Jan 2020)
+ - Save date values as ToString("dd-MMM-yyyy HH:mm:ss.fff", New System.Globalization.CultureInfo("en-US"))
+ - Changed all comparisons to 'Equals' and 'StringComparison.OrdinalIgnoreCase'
+
+Ver 2.3.4.1 (23 Aug 2014)
+ - Cleaned up the code
+
+Ver 2.3.4.0 (14 May 2014)
+ - fixed problem in  lack of ID in single row tables.
+    - If I can recognize the primary key field, I enter NULL
+      - I expect the PK to be the 1st field, or the 2nd field if the 1st is TableName_XXXX
+
+Ver 2.3.3.0 (12 May 2014)
+ - fixed bug in closing of DBConnection
+
+Ver 2.3.2.0 (5 May 2014)
+ - removed superfluous XML text
+
+Ver 2.3.0.0 (5 May 2014)
+ - it now enters one row per update.
+ - no longer does queries on the fly (stricter security). Only uses SP's 
+ - no longer uses datatables
+
+=======================================================================================
+-- Create the audit table.
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[c_SystemAudit]') AND type in (N'U'))
+DROP TABLE [dbo].[c_SystemAudit]
+GO
+
+CREATE TABLE [dbo].[c_SystemAudit](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[TableName] [varchar](50) NULL,
+	[RowId] [bigint] NULL,
+	[Operation] [varchar](10) NULL,
+	[OccurredAt] [datetime] NULL,
+	[SqlCurrentUser] [nvarchar](50) NULL,
+	[ChangedByUser] [nvarchar](50) NULL,
+	[ActiveLoginID] [bigint] NULL,
+	[SqlSystemUser] [nvarchar](50) NULL,
+	[SqlAppName] [nvarchar](250) NULL,
+	[SqlHostName] [varchar](50) NULL,
+	[Changes] [nvarchar](max) NULL,
+ CONSTRAINT [PK_c_SystemAudit] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+=====================================================================================
+  -- ALTER the assembly. When dropping the old one we must drop any
+  -- triggers created from it first.
+
+  -- ALTER the assembly. When dropping the old one we must drop any
+  -- triggers created from it first.
+  -- when working in release environent
+  declare @AssemblyName varchar(100)
+  set @AssemblyName = 'AuditCommon'
+
+  declare @AssemblyDebug varchar(1000)
+  set @AssemblyDebug = 'C:\MyCode\AuditCommon\AuditCommon\AuditCommon.pdb'
+
+  declare @AssemblyObject varchar(1000)
+  set @AssemblyObject = 'C:\MyCode\AuditCommon\AuditCommon\AuditCommon.dll'
+
+  --Drop assembly
+  if exists(select name from sys.assemblies where name = @AssemblyName)
+	  drop assembly [AuditCommon]
+  create assembly [AuditCommon] from @AssemblyObject with permission_set = safe
+  begin try
+      -- This adds debugging info; the file will not be present in your "release" version
+      -- (as opposed to your "debug" version), so we don't want to fail if it's not there.
+      alter assembly [AuditCommon] add file from @AssemblyDebug
+  end try
+  begin catch
+  end catch
+
+
+=====================================================================================
+-- Associate the generic CLR trigger with the table.
+ALTER TRIGGER [dbo].[trc_User_Audit] 
+ON [dbo].[c_User] WITH EXECUTE AS CALLER AFTER  INSERT, DELETE, UPDATE 
+NOT FOR REPLICATION
+AS 
+EXTERNAL NAME [AuditCommon].[AuditCommon.Triggers].[AuditCommon]
+
+=======================================================================================
+If Creating for SQL 205 then
+run this post build event
+"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\sgen.exe"  $(TargetPath)
+
+Use this to create assembly:
+create assembly [AuditCommon] from 'C:\Public\AuditCommon.dll' with permission_set = safe
+go
+create assembly [AuditCommonSerializer] from 'C:\Public\AuditCommon.XmlSerializers.dll' with permission_set = safe
+go
+
+=======================================================================================
+Run this SP
+
+CREATE PROCEDURE [dbo].[c__SystemAuditAdd] 
+  (
+   @TableName varchar(50) 
+  ,@RowID bigint 
+  ,@Operation varchar(10) 
+  ,@OccurredAt datetime 
+  --,@SqlCurrentUser nvarchar(50) 
+  ,@ChangedByUser nvarchar(50) 
+  ,@ActiveLoginID bigint 
+  --,@SqlSystemUser nvarchar(50) 
+  --,@SqlAppName nvarchar(250) 
+  --,@SqlHostName varchar(50) 
+  ,@Changes nvarchar(max) 
+  )
+AS  
+  SET NOCOUNT ON
+
+  DECLARE @ID bigint
+
+  INSERT INTO [dbo].[c_SystemAudit]
+    ([TableName]
+    ,[RowID]
+    ,[Operation]
+    ,[OccurredAt]
+    ,[SqlCurrentUser]
+    ,[ChangedByUser]
+    ,[ActiveLoginID]
+    ,[SqlSystemUser]
+    ,[SqlAppName]
+    ,[SqlHostName]
+    ,[Changes]
+    )
+  VALUES 
+    (@TableName
+    ,@RowID
+    ,@Operation
+    ,@OccurredAt
+    ,Current_User
+    ,@ChangedByUser
+    ,@ActiveLoginID
+    ,System_User
+    ,APP_NAME()
+    ,HOST_NAME()
+    ,@Changes
+    )
+  SET @ID = SCOPE_IDENTITY()
+  
+  SELECT @ID AS ID
+  
+  RETURN
+
+GO
+
+
+
+

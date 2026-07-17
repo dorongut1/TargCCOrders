@@ -1,0 +1,34 @@
+# ── Visual Studio / .NET ──────────────────────────────
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.pdb
+TestResults/
+packages/
+*.slnLaunch.user
+
+# ── React / Node ──────────────────────────────────────
+node_modules/
+TargCCOrders.ReactUI/ReactUI/dist/
+*.tsbuildinfo
+npm-debug.log*
+
+# ── Logs ──────────────────────────────────────────────
+Logs/
+*.log
+
+# ── סודות — לעולם לא לגיט ────────────────────────────
+# מפתח ה-JWT האמיתי צריך לשבת רק על השרת:
+# appsettings.Production.json מוחרג, appsettings.json נשאר עם placeholder
+appsettings.Production.json
+*.secrets.json
+
+# ── זמניים ────────────────────────────────────────────
+_to_delete/
+zzPreviousRole_Backup*
+
+# ── קבצי עזר גדולים (האקסל המקורי — גיבוי, לא קוד) ──
+*.xlsx

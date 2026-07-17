@@ -1,0 +1,1251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{114C9AF9-4718-4DA7-A613-6D92C066EA09}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>TargCCOrders.DataController.My.MyApplication</StartupObject>
+    <RootNamespace>TargCCOrders.DataController</RootNamespace>
+    <AssemblyName>TargCCOrders.WinF</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>TargCCOrders.WinF.xml</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>TargCCOrders.WinF.xml</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>On</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=9.0.0.8, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.9.0.8\lib\net462\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Configuration" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+    <Import Include="TargCCOrders.DataController" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="CC\GridSetting.vb" />
+    <Compile Include="CC\IntelliCombo.Designer.vb">
+      <DependentUpon>IntelliCombo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CC\IntelliCombo.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CC\IntelliMultiCombo.Designer.vb">
+      <DependentUpon>IntelliMultiCombo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CC\IntelliMultiCombo.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CC\MenuTree.Designer.vb">
+      <DependentUpon>MenuTree.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CC\MenuTree.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CC\modWinF.vb" />
+    <Compile Include="CC\Report\ReportColumn.vb" />
+    <Compile Include="CC\Report\ReportColumnCollection.vb" />
+    <Compile Include="CC\Report\ReportDocument.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CC\Report\ReportPageEventArgs.vb" />
+    <Compile Include="ctlccBeehiveBuyerTracking.Designer.vb">
+      <DependentUpon>ctlccBeehiveBuyerTracking.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccBeehiveBuyerTracking.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccBeehiveBuyerTracking.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccBeehiveBuyerTrackingCol.Designer.vb">
+      <DependentUpon>ctlccBeehiveBuyerTrackingCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccBeehiveBuyerTrackingCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccBeehiveBuyerTrackingCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccCustomer.Designer.vb">
+      <DependentUpon>ctlccCustomer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccCustomer.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccCustomer.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccCustomerCol.Designer.vb">
+      <DependentUpon>ctlccCustomerCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccCustomerCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccCustomerCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccCustomerDebt.Designer.vb">
+      <DependentUpon>ctlccCustomerDebt.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccCustomerDebt.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccCustomerDebt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccCustomerDebtCol.Designer.vb">
+      <DependentUpon>ctlccCustomerDebtCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccCustomerDebtCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccCustomerDebtCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccDelivery.Designer.vb">
+      <DependentUpon>ctlccDelivery.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccDelivery.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccDelivery.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccDeliveryCol.Designer.vb">
+      <DependentUpon>ctlccDeliveryCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccDeliveryCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccDeliveryCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderHeader.Designer.vb">
+      <DependentUpon>ctlccOrderHeader.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccOrderHeader.prtMn.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderHeader.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderHeader.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderHeaderCol.Designer.vb">
+      <DependentUpon>ctlccOrderHeaderCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccOrderHeaderCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderHeaderCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderLine.Designer.vb">
+      <DependentUpon>ctlccOrderLine.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccOrderLine.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderLine.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderLineCol.Designer.vb">
+      <DependentUpon>ctlccOrderLineCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccOrderLineCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccOrderLineCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProduct.Designer.vb">
+      <DependentUpon>ctlccProduct.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccProduct.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProduct.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductCol.Designer.vb">
+      <DependentUpon>ctlccProductCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccProductCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductPrice.Designer.vb">
+      <DependentUpon>ctlccProductPrice.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccProductPrice.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductPrice.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductPriceCol.Designer.vb">
+      <DependentUpon>ctlccProductPriceCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccProductPriceCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductPriceCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductPriceHist.Designer.vb">
+      <DependentUpon>ctlccProductPriceHist.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccProductPriceHist.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductPriceHist.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductPriceHistCol.Designer.vb">
+      <DependentUpon>ctlccProductPriceHistCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccProductPriceHistCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccProductPriceHistCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccSupplierOrder.Designer.vb">
+      <DependentUpon>ctlccSupplierOrder.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccSupplierOrder.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccSupplierOrder.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccSupplierOrderCol.Designer.vb">
+      <DependentUpon>ctlccSupplierOrderCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlccSupplierOrderCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlccSupplierOrderCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_AlertMessage.Designer.vb">
+      <DependentUpon>ctlc_AlertMessage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_AlertMessage.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_AlertMessage.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_AlertMessageCol.Designer.vb">
+      <DependentUpon>ctlc_AlertMessageCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_AlertMessageCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_AlertMessageCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_AuditIndexed.Designer.vb">
+      <DependentUpon>ctlc_AuditIndexed.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_AuditIndexed.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_AuditIndexed.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_AuditIndexedCol.Designer.vb">
+      <DependentUpon>ctlc_AuditIndexedCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_AuditIndexedCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_AuditIndexedCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Enumeration.Designer.vb">
+      <DependentUpon>ctlc_Enumeration.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Enumeration.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Enumeration.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_EnumerationCol.Designer.vb">
+      <DependentUpon>ctlc_EnumerationCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_EnumerationCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_EnumerationCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_IndexFragmentation.Designer.vb">
+      <DependentUpon>ctlc_IndexFragmentation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_IndexFragmentation.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_IndexFragmentation.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_IndexFragmentationCol.Designer.vb">
+      <DependentUpon>ctlc_IndexFragmentationCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_IndexFragmentationCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_IndexFragmentationCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Job.Designer.vb">
+      <DependentUpon>ctlc_Job.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Job.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Job.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_JobAlertRecipient.Designer.vb">
+      <DependentUpon>ctlc_JobAlertRecipient.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_JobAlertRecipient.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_JobAlertRecipient.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_JobAlertRecipientCol.Designer.vb">
+      <DependentUpon>ctlc_JobAlertRecipientCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_JobAlertRecipientCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_JobAlertRecipientCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_JobCol.Designer.vb">
+      <DependentUpon>ctlc_JobCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_JobCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_JobCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Language.Designer.vb">
+      <DependentUpon>ctlc_Language.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Language.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Language.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LanguageCol.Designer.vb">
+      <DependentUpon>ctlc_LanguageCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LanguageCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LanguageCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedAlert.Designer.vb">
+      <DependentUpon>ctlc_LoggedAlert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LoggedAlert.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedAlert.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedAlertCol.Designer.vb">
+      <DependentUpon>ctlc_LoggedAlertCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LoggedAlertCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedAlertCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedJob.Designer.vb">
+      <DependentUpon>ctlc_LoggedJob.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LoggedJob.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedJob.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedJobCol.Designer.vb">
+      <DependentUpon>ctlc_LoggedJobCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LoggedJobCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedJobCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedLogin.Designer.vb">
+      <DependentUpon>ctlc_LoggedLogin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LoggedLogin.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedLogin.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedLoginCol.Designer.vb">
+      <DependentUpon>ctlc_LoggedLoginCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LoggedLoginCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedLoginCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedRequest.Designer.vb">
+      <DependentUpon>ctlc_LoggedRequest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LoggedRequest.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedRequest.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedRequestCol.Designer.vb">
+      <DependentUpon>ctlc_LoggedRequestCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LoggedRequestCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LoggedRequestCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Lookup.Designer.vb">
+      <DependentUpon>ctlc_Lookup.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Lookup.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Lookup.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LookupCol.Designer.vb">
+      <DependentUpon>ctlc_LookupCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_LookupCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_LookupCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Mail.Designer.vb">
+      <DependentUpon>ctlc_Mail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Mail.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Mail.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_MailCol.Designer.vb">
+      <DependentUpon>ctlc_MailCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_MailCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_MailCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_MFA.Designer.vb">
+      <DependentUpon>ctlc_MFA.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_MFA.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_MFA.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_MFACol.Designer.vb">
+      <DependentUpon>ctlc_MFACol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_MFACol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_MFACol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ObjectToTranslate.Designer.vb">
+      <DependentUpon>ctlc_ObjectToTranslate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_ObjectToTranslate.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ObjectToTranslate.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ObjectToTranslateCol.Designer.vb">
+      <DependentUpon>ctlc_ObjectToTranslateCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_ObjectToTranslateCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ObjectToTranslateCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ObjectTranslation.Designer.vb">
+      <DependentUpon>ctlc_ObjectTranslation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_ObjectTranslation.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ObjectTranslation.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ObjectTranslationCol.Designer.vb">
+      <DependentUpon>ctlc_ObjectTranslationCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_ObjectTranslationCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ObjectTranslationCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Permission.Designer.vb">
+      <DependentUpon>ctlc_Permission.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Permission.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Permission.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_PermissionCol.Designer.vb">
+      <DependentUpon>ctlc_PermissionCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_PermissionCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_PermissionCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Process.Designer.vb">
+      <DependentUpon>ctlc_Process.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Process.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Process.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ProcessCol.Designer.vb">
+      <DependentUpon>ctlc_ProcessCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_ProcessCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_ProcessCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Role.Designer.vb">
+      <DependentUpon>ctlc_Role.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Role.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Role.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_RoleCol.Designer.vb">
+      <DependentUpon>ctlc_RoleCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_RoleCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_RoleCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_SystemAudit.Designer.vb">
+      <DependentUpon>ctlc_SystemAudit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_SystemAudit.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_SystemAudit.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_SystemAuditCol.Designer.vb">
+      <DependentUpon>ctlc_SystemAuditCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_SystemAuditCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_SystemAuditCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_SystemDefault.Designer.vb">
+      <DependentUpon>ctlc_SystemDefault.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_SystemDefault.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_SystemDefault.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_SystemDefaultCol.Designer.vb">
+      <DependentUpon>ctlc_SystemDefaultCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_SystemDefaultCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_SystemDefaultCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Table.Designer.vb">
+      <DependentUpon>ctlc_Table.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_Table.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_Table.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_TableCol.Designer.vb">
+      <DependentUpon>ctlc_TableCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_TableCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_TableCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_TableSize.Designer.vb">
+      <DependentUpon>ctlc_TableSize.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_TableSize.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_TableSize.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_TableSizeCol.Designer.vb">
+      <DependentUpon>ctlc_TableSizeCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_TableSizeCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_TableSizeCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_User.Designer.vb">
+      <DependentUpon>ctlc_User.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_User.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_User.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserCol.Designer.vb">
+      <DependentUpon>ctlc_UserCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_UserCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserLoginKey.Designer.vb">
+      <DependentUpon>ctlc_UserLoginKey.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_UserLoginKey.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserLoginKey.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserLoginKeyCol.Designer.vb">
+      <DependentUpon>ctlc_UserLoginKeyCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_UserLoginKeyCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserLoginKeyCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserPermission.Designer.vb">
+      <DependentUpon>ctlc_UserPermission.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_UserPermission.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserPermission.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserPermissionCol.Designer.vb">
+      <DependentUpon>ctlc_UserPermissionCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_UserPermissionCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserPermissionCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserStatus.Designer.vb">
+      <DependentUpon>ctlc_UserStatus.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_UserStatus.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserStatus.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserStatusCol.Designer.vb">
+      <DependentUpon>ctlc_UserStatusCol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlc_UserStatusCol.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlc_UserStatusCol.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccBeehiveBuyerTracking.Designer.vb">
+      <DependentUpon>ctlPnlccBeehiveBuyerTracking.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccBeehiveBuyerTracking.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccBeehiveBuyerTracking.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccCustomer.Designer.vb">
+      <DependentUpon>ctlPnlccCustomer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccCustomer.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccCustomer.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccCustomerDebt.Designer.vb">
+      <DependentUpon>ctlPnlccCustomerDebt.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccCustomerDebt.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccCustomerDebt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccDelivery.Designer.vb">
+      <DependentUpon>ctlPnlccDelivery.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccDelivery.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccDelivery.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccOrderHeader.Designer.vb">
+      <DependentUpon>ctlPnlccOrderHeader.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccOrderHeader.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccOrderHeader.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccOrderLine.Designer.vb">
+      <DependentUpon>ctlPnlccOrderLine.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccOrderLine.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccOrderLine.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccProduct.Designer.vb">
+      <DependentUpon>ctlPnlccProduct.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccProduct.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccProduct.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccProductPrice.Designer.vb">
+      <DependentUpon>ctlPnlccProductPrice.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccProductPrice.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccProductPrice.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccProductPriceHist.Designer.vb">
+      <DependentUpon>ctlPnlccProductPriceHist.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccProductPriceHist.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccProductPriceHist.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccSupplierOrder.Designer.vb">
+      <DependentUpon>ctlPnlccSupplierOrder.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlccSupplierOrder.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlccSupplierOrder.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_AlertMessage.Designer.vb">
+      <DependentUpon>ctlPnlc_AlertMessage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_AlertMessage.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_AlertMessage.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_AuditIndexed.Designer.vb">
+      <DependentUpon>ctlPnlc_AuditIndexed.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_AuditIndexed.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_AuditIndexed.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Enumeration.Designer.vb">
+      <DependentUpon>ctlPnlc_Enumeration.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Enumeration.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Enumeration.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_IndexFragmentation.Designer.vb">
+      <DependentUpon>ctlPnlc_IndexFragmentation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_IndexFragmentation.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_IndexFragmentation.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Job.Designer.vb">
+      <DependentUpon>ctlPnlc_Job.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Job.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Job.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_JobAlertRecipient.Designer.vb">
+      <DependentUpon>ctlPnlc_JobAlertRecipient.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_JobAlertRecipient.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_JobAlertRecipient.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Language.Designer.vb">
+      <DependentUpon>ctlPnlc_Language.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Language.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Language.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedAlert.Designer.vb">
+      <DependentUpon>ctlPnlc_LoggedAlert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedAlert.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedAlert.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedJob.Designer.vb">
+      <DependentUpon>ctlPnlc_LoggedJob.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedJob.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedJob.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedLogin.Designer.vb">
+      <DependentUpon>ctlPnlc_LoggedLogin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedLogin.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedLogin.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedRequest.Designer.vb">
+      <DependentUpon>ctlPnlc_LoggedRequest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedRequest.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_LoggedRequest.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Lookup.Designer.vb">
+      <DependentUpon>ctlPnlc_Lookup.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Lookup.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Lookup.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Mail.Designer.vb">
+      <DependentUpon>ctlPnlc_Mail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Mail.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Mail.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_MFA.Designer.vb">
+      <DependentUpon>ctlPnlc_MFA.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_MFA.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_MFA.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_ObjectToTranslate.Designer.vb">
+      <DependentUpon>ctlPnlc_ObjectToTranslate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_ObjectToTranslate.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_ObjectToTranslate.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_ObjectTranslation.Designer.vb">
+      <DependentUpon>ctlPnlc_ObjectTranslation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_ObjectTranslation.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_ObjectTranslation.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Permission.Designer.vb">
+      <DependentUpon>ctlPnlc_Permission.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Permission.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Permission.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Process.Designer.vb">
+      <DependentUpon>ctlPnlc_Process.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Process.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Process.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Role.Designer.vb">
+      <DependentUpon>ctlPnlc_Role.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Role.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Role.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_SystemAudit.Designer.vb">
+      <DependentUpon>ctlPnlc_SystemAudit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_SystemAudit.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_SystemAudit.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_SystemDefault.Designer.vb">
+      <DependentUpon>ctlPnlc_SystemDefault.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_SystemDefault.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_SystemDefault.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Table.Designer.vb">
+      <DependentUpon>ctlPnlc_Table.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_Table.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_Table.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_TableSize.Designer.vb">
+      <DependentUpon>ctlPnlc_TableSize.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_TableSize.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_TableSize.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_User.Designer.vb">
+      <DependentUpon>ctlPnlc_User.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_User.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_User.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_UserLoginKey.Designer.vb">
+      <DependentUpon>ctlPnlc_UserLoginKey.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_UserLoginKey.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_UserLoginKey.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_UserPermission.Designer.vb">
+      <DependentUpon>ctlPnlc_UserPermission.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_UserPermission.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_UserPermission.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_UserStatus.Designer.vb">
+      <DependentUpon>ctlPnlc_UserStatus.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlc_UserStatus.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlc_UserStatus.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlMaintenance.Designer.vb">
+      <DependentUpon>ctlPnlMaintenance.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ctlPnlMaintenance.prt.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ctlPnlMaintenance.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="frmAbout.Designer.vb">
+      <DependentUpon>frmAbout.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAbout.prt.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAbout.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFilter.Designer.vb">
+      <DependentUpon>frmFilter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmFilter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.Designer.vb">
+      <DependentUpon>frmLogin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogin.prt.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLoginOTP.Designer.vb">
+      <DependentUpon>frmLoginOTP.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmLoginOTP.prt.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLoginOTP.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.vb">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.prt.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMessageOrInputBox.Designer.vb">
+      <DependentUpon>frmMessageOrInputBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMessageOrInputBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPopup.Designer.vb">
+      <DependentUpon>frmPopup.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmPopup.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUpdateField.Designer.vb">
+      <DependentUpon>frmUpdateField.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmUpdateField.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modWinF.prt.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ctlccCustomerDebtCol.resx">
+      <DependentUpon>ctlccCustomerDebtCol.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctlc_AlertMessageCol.resx">
+      <DependentUpon>ctlc_AlertMessageCol.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctlc_ObjectTranslationCol.prt.resx">
+      <DependentUpon>ctlc_ObjectTranslationCol.prt.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ctlPnlccOrderHeader.resx">
+      <DependentUpon>ctlPnlccOrderHeader.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WSController\WSController.vbproj">
+      <Project>{adb13468-68a9-4524-a365-3d009406c113}</Project>
+      <Name>WSController</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TargetIcon32.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TargetSmall.JPG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+</Project>

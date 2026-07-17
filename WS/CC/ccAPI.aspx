@@ -1,0 +1,1 @@
+﻿<%@ Page Language="vb" AutoEventWireup="false" EnableViewState="false" EnableSessionState="False" CodeBehind="ccAPI.aspx.vb" Inherits="TargCCOrders.WS.ccAPI" %>

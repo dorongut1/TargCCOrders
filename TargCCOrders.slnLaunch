@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "WinF Vs WS",
+    "Projects": [
+      {
+        "Path": "WS\\WS.vbproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "WinF\\WinF.vbproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
