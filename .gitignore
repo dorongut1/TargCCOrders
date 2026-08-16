@@ -32,7 +32,7 @@ zzPreviousRole_Backup*
 
 # ── ארטיפקטים של סשן עבודה — אסור שייכנסו לריפו ──────
 # _token.txt מכיל JWT חי עם כרטיס TargCC מוצפן בתוכו
-_token.txt
+_token*.txt
 _api_out*.log
 _api_err*.log
 _build.log

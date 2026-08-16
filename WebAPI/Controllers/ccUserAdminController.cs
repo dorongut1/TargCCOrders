@@ -350,13 +350,55 @@ namespace TargCCOrders.WebAPI.Controllers
 
             // Prove ownership before changing anything — a stolen token should not
             // be enough to take over the account.
-            fault = user.CheckPassword(request.CurrentPassword ?? "", requester);
-            if (!fault.isOK) return BadRequest(new { message = "הסיסמה הנוכחית שגויה." });
+            //
+            // csUser.CheckPassword is NOT usable here. It compares a plain
+            // unsalted SHA256 against the stored hash (which the login path does
+            // not produce), and worse, when the comparison fails it sets fault 92
+            // and then unconditionally calls pFault.SetOK() in its expiry branch,
+            // which throws — turning a wrong password into a 500.
+            //
+            // Re-authenticating opens a NEW login session. With simultaneous
+            // logins disabled that supersedes the caller's own session, and the
+            // original requester is then rejected with
+            // "Expected LoginID x, Found LoginID y". So the fresh requester the
+            // re-auth produced is what must carry out the change.
+            var verified = ReAuthenticate(user.UserName, request.CurrentPassword ?? "");
+            if (verified == null)
+                return BadRequest(new { message = "הסיסמה הנוכחית שגויה." });
 
-            fault = user.ChangePassword(request.NewPassword, requester);
+            fault = user.ChangePassword(request.NewPassword, verified);
             if (!fault.isOK) return BadRequest(new { message = Explain(fault) });
 
             return Ok(new { message = "הסיסמה שונתה בהצלחה." });
+        }
+
+        /// <summary>Verifies a username/password pair via TargCC's own login and
+        /// returns the resulting requester, or null when the password is wrong.</summary>
+        private clsRequester? ReAuthenticate(string userName, string password)
+        {
+            if (string.IsNullOrEmpty(password)) return null;
+            try
+            {
+                clsFault initFault = null!;
+                var accessingEntity = new csAccessingEntity(
+                    vLoadPCDetails: false, vLoadIPAndCountry: false,
+                    vRequester: null, rFault: ref initFault);
+                accessingEntity.ApplicationName = ApplicationName;
+                accessingEntity.DnsGetHostName = Environment.MachineName;
+                accessingEntity.EnvironmentUserName = Environment.UserName;
+                accessingEntity.GmtTime = DateTime.UtcNow;
+                accessingEntity.LocalTime = DateTime.Now;
+
+                clsRequester probe = null!;
+                var fault = ccSecurity.LogInByNamePwd(userName, password, ref probe,
+                    vSendMessageFor2FA: false, vSendMessageOnPasswordExpiry: false,
+                    vAccessingEntity: accessingEntity);
+                return fault.isOK ? probe : null;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
