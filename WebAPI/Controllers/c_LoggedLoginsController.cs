@@ -16,11 +16,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/loggedLogins?page=0&pageSize=25&search=xyz 
         [Route("loggedLogins")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult Fill([FromQuery] int page = 0, [FromQuery] int pageSize = 25, [FromQuery] string search = "", [FromQuery] string sortField = "", [FromQuery] string sortDir = "asc") 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             clsFault? fault = null; 
             csLoggedLoginCol loggedLogins = new csLoggedLoginCol(requester, ref fault); if (!fault.isOK) return BadRequest(!string.IsNullOrEmpty(fault.FreeText) ? fault.FreeText : fault.Message);
@@ -85,11 +86,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/loggedLogins/{id} 
         [Route("loggedLogins/{id}")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<LoggedLoginDto> GetByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csLoggedLogin loggedLogin = new csLoggedLogin(); 
             clsFault fault = loggedLogin.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 

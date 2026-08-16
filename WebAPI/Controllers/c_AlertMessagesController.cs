@@ -16,11 +16,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/alertMessages?page=0&pageSize=25&search=xyz 
         [Route("alertMessages")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult Fill([FromQuery] int page = 0, [FromQuery] int pageSize = 25, [FromQuery] string search = "", [FromQuery] string sortField = "", [FromQuery] string sortDir = "asc") 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             clsFault? fault = null; 
             csAlertMessageCol alertMessages = new csAlertMessageCol(vIsLocalized: true, requester, ref fault); if (!fault.isOK) return BadRequest(!string.IsNullOrEmpty(fault.FreeText) ? fault.FreeText : fault.Message);
@@ -65,11 +66,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/alertMessages/{id} 
         [Route("alertMessages/{id}")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<AlertMessageDto> GetByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csAlertMessage alertMessage = new csAlertMessage(vIsLocalized: true); 
             clsFault fault = alertMessage.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -80,11 +82,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // POST api/alertMessages 
         [Route("alertMessages")] 
         [HttpPost] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<AlertMessageDto> CreateAlertMessage(AlertMessageUpdateDto alertMessageDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (alertMessageDto.Id != 0) return BadRequest($"Received an ID of {alertMessageDto.Id}. Expected 0 for a new record."); 
  
@@ -108,11 +111,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // PUT api/alertMessages 
         [Route("alertMessages/{id}")] 
         [HttpPut] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<AlertMessageDto> UpdateAlertMessage(long id, AlertMessageUpdateDto alertMessageDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (alertMessageDto.Id != id) return BadRequest($"ID received {id}, but ID in object is {alertMessageDto.Id}"); 
  
@@ -136,11 +140,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/alertMessages/{id} 
         [Route("alertMessages/{id}")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csAlertMessage alertMessage = new csAlertMessage(); 
             clsFault fault = alertMessage.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -152,11 +157,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/alertMessages/batch 
         [Route("alertMessages/batch")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteBatch([FromBody] long[] ids) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             var errors = new System.Collections.Generic.List<string>(); 
             var deleted = 0; 

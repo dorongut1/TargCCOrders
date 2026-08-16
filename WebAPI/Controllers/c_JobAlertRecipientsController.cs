@@ -16,11 +16,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/jobAlertRecipients?page=0&pageSize=25&search=xyz 
         [Route("jobAlertRecipients")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult Fill([FromQuery] int page = 0, [FromQuery] int pageSize = 25, [FromQuery] string search = "", [FromQuery] string sortField = "", [FromQuery] string sortDir = "asc", [FromQuery] long? jobId = null, [FromQuery] long? userId = null) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             clsFault? fault = null; 
             csJobAlertRecipientCol jobAlertRecipients = new csJobAlertRecipientCol(clsEnums.enmLoadParent.DoNotLoad, requester, ref fault); if (!fault.isOK) return BadRequest(!string.IsNullOrEmpty(fault.FreeText) ? fault.FreeText : fault.Message);
@@ -67,11 +68,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/jobAlertRecipients/{id} 
         [Route("jobAlertRecipients/{id}")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<JobAlertRecipientDto> GetByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csJobAlertRecipient jobAlertRecipient = new csJobAlertRecipient(clsEnums.enmLoadParent.DoNotLoad); 
             clsFault fault = jobAlertRecipient.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -82,11 +84,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // POST api/jobAlertRecipients 
         [Route("jobAlertRecipients")] 
         [HttpPost] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<JobAlertRecipientDto> CreateJobAlertRecipient(JobAlertRecipientUpdateDto jobAlertRecipientDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (jobAlertRecipientDto.Id != 0) return BadRequest($"Received an ID of {jobAlertRecipientDto.Id}. Expected 0 for a new record."); 
  
@@ -110,11 +113,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // PUT api/jobAlertRecipients 
         [Route("jobAlertRecipients/{id}")] 
         [HttpPut] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<JobAlertRecipientDto> UpdateJobAlertRecipient(long id, JobAlertRecipientUpdateDto jobAlertRecipientDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (jobAlertRecipientDto.Id != id) return BadRequest($"ID received {id}, but ID in object is {jobAlertRecipientDto.Id}"); 
  
@@ -138,11 +142,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/jobAlertRecipients/{id} 
         [Route("jobAlertRecipients/{id}")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csJobAlertRecipient jobAlertRecipient = new csJobAlertRecipient(); 
             clsFault fault = jobAlertRecipient.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -154,11 +159,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/jobAlertRecipients/batch 
         [Route("jobAlertRecipients/batch")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteBatch([FromBody] long[] ids) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             var errors = new System.Collections.Generic.List<string>(); 
             var deleted = 0; 

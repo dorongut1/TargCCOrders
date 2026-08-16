@@ -16,11 +16,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/enumerations?page=0&pageSize=25&search=xyz 
         [Route("enumerations")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult Fill([FromQuery] int page = 0, [FromQuery] int pageSize = 25, [FromQuery] string search = "", [FromQuery] string sortField = "", [FromQuery] string sortDir = "asc") 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             clsFault? fault = null; 
             csEnumerationCol enumerations = new csEnumerationCol(vIsLocalized: true, requester, ref fault); if (!fault.isOK) return BadRequest(!string.IsNullOrEmpty(fault.FreeText) ? fault.FreeText : fault.Message);
@@ -62,11 +63,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/enumerations/{id} 
         [Route("enumerations/{id}")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<EnumerationDto> GetByID(int id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csEnumeration enumeration = new csEnumeration(vIsLocalized: true); 
             clsFault fault = enumeration.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -77,11 +79,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // POST api/enumerations 
         [Route("enumerations")] 
         [HttpPost] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<EnumerationDto> CreateEnumeration(EnumerationUpdateDto enumerationDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (enumerationDto.Id != 0) return BadRequest($"Received an ID of {enumerationDto.Id}. Expected 0 for a new record."); 
  
@@ -105,11 +108,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // PUT api/enumerations 
         [Route("enumerations/{id}")] 
         [HttpPut] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<EnumerationDto> UpdateEnumeration(int id, EnumerationUpdateDto enumerationDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (enumerationDto.Id != id) return BadRequest($"ID received {id}, but ID in object is {enumerationDto.Id}"); 
  
@@ -133,11 +137,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/enumerations/{id} 
         [Route("enumerations/{id}")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteByID(int id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csEnumeration enumeration = new csEnumeration(); 
             clsFault fault = enumeration.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -149,11 +154,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/enumerations/batch 
         [Route("enumerations/batch")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteBatch([FromBody] int[] ids) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             var errors = new System.Collections.Generic.List<string>(); 
             var deleted = 0; 

@@ -16,11 +16,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/userStatuses?page=0&pageSize=25&search=xyz 
         [Route("userStatuses")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult Fill([FromQuery] int page = 0, [FromQuery] int pageSize = 25, [FromQuery] string search = "", [FromQuery] string sortField = "", [FromQuery] string sortDir = "asc", [FromQuery] long? userId = null) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             clsFault? fault = null; 
             csUserStatusCol userStatuses = new csUserStatusCol(clsEnums.enmLoadParent.DoNotLoad, requester, ref fault); if (!fault.isOK) return BadRequest(!string.IsNullOrEmpty(fault.FreeText) ? fault.FreeText : fault.Message);
@@ -64,11 +65,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/userStatuses/{id} 
         [Route("userStatuses/{id}")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<UserStatusDto> GetByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csUserStatus userStatus = new csUserStatus(clsEnums.enmLoadParent.DoNotLoad); 
             clsFault fault = userStatus.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -79,11 +81,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // POST api/userStatuses 
         [Route("userStatuses")] 
         [HttpPost] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<UserStatusDto> CreateUserStatus(UserStatusUpdateDto userStatusDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (userStatusDto.Id != 0) return BadRequest($"Received an ID of {userStatusDto.Id}. Expected 0 for a new record."); 
  
@@ -107,11 +110,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // PUT api/userStatuses 
         [Route("userStatuses/{id}")] 
         [HttpPut] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<UserStatusDto> UpdateUserStatus(long id, UserStatusUpdateDto userStatusDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (userStatusDto.Id != id) return BadRequest($"ID received {id}, but ID in object is {userStatusDto.Id}"); 
  
@@ -135,11 +139,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/userStatuses/{id} 
         [Route("userStatuses/{id}")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csUserStatus userStatus = new csUserStatus(); 
             clsFault fault = userStatus.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -151,11 +156,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/userStatuses/batch 
         [Route("userStatuses/batch")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteBatch([FromBody] long[] ids) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             var errors = new System.Collections.Generic.List<string>(); 
             var deleted = 0; 

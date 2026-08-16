@@ -18,6 +18,13 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <!-- WMI. DBController calls into it while building the AccessingEntity, so
+         without this every LOGIN fails at runtime with fault 60
+         ("Could not load file or assembly 'System.Management'") even though the
+         solution compiles cleanly. -->
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.1" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.1" />
   </ItemGroup>
 
   <!-- Reference the WebAPI controllers library -->

@@ -16,11 +16,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/objectToTranslates?page=0&pageSize=25&search=xyz 
         [Route("objectToTranslates")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult Fill([FromQuery] int page = 0, [FromQuery] int pageSize = 25, [FromQuery] string search = "", [FromQuery] string sortField = "", [FromQuery] string sortDir = "asc") 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             clsFault? fault = null; 
             csObjectToTranslateCol objectToTranslates = new csObjectToTranslateCol(requester, ref fault); if (!fault.isOK) return BadRequest(!string.IsNullOrEmpty(fault.FreeText) ? fault.FreeText : fault.Message);
@@ -62,11 +63,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/objectToTranslates/{id} 
         [Route("objectToTranslates/{id}")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<ObjectToTranslateDto> GetByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csObjectToTranslate objectToTranslate = new csObjectToTranslate(); 
             clsFault fault = objectToTranslate.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -77,11 +79,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // POST api/objectToTranslates 
         [Route("objectToTranslates")] 
         [HttpPost] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<ObjectToTranslateDto> CreateObjectToTranslate(ObjectToTranslateUpdateDto objectToTranslateDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (objectToTranslateDto.Id != 0) return BadRequest($"Received an ID of {objectToTranslateDto.Id}. Expected 0 for a new record."); 
  
@@ -105,11 +108,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // PUT api/objectToTranslates 
         [Route("objectToTranslates/{id}")] 
         [HttpPut] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<ObjectToTranslateDto> UpdateObjectToTranslate(long id, ObjectToTranslateUpdateDto objectToTranslateDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (objectToTranslateDto.Id != id) return BadRequest($"ID received {id}, but ID in object is {objectToTranslateDto.Id}"); 
  
@@ -133,11 +137,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/objectToTranslates/{id} 
         [Route("objectToTranslates/{id}")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csObjectToTranslate objectToTranslate = new csObjectToTranslate(); 
             clsFault fault = objectToTranslate.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -149,11 +154,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/objectToTranslates/batch 
         [Route("objectToTranslates/batch")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteBatch([FromBody] long[] ids) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             var errors = new System.Collections.Generic.List<string>(); 
             var deleted = 0; 

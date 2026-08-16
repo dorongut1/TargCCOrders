@@ -16,11 +16,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/userPermissions?page=0&pageSize=25&search=xyz 
         [Route("userPermissions")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult Fill([FromQuery] int page = 0, [FromQuery] int pageSize = 25, [FromQuery] string search = "", [FromQuery] string sortField = "", [FromQuery] string sortDir = "asc", [FromQuery] long? userId = null) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             clsFault? fault = null; 
             csUserPermissionCol userPermissions = new csUserPermissionCol(clsEnums.enmLoadParent.DoNotLoad, requester, ref fault); if (!fault.isOK) return BadRequest(!string.IsNullOrEmpty(fault.FreeText) ? fault.FreeText : fault.Message);
@@ -68,11 +69,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // GET api/userPermissions/{id} 
         [Route("userPermissions/{id}")] 
         [HttpGet] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<UserPermissionDto> GetByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csUserPermission userPermission = new csUserPermission(clsEnums.enmLoadParent.DoNotLoad); 
             clsFault fault = userPermission.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -83,11 +85,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // POST api/userPermissions 
         [Route("userPermissions")] 
         [HttpPost] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<UserPermissionDto> CreateUserPermission(UserPermissionUpdateDto userPermissionDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (userPermissionDto.Id != 0) return BadRequest($"Received an ID of {userPermissionDto.Id}. Expected 0 for a new record."); 
  
@@ -111,11 +114,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // PUT api/userPermissions 
         [Route("userPermissions/{id}")] 
         [HttpPut] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult<UserPermissionDto> UpdateUserPermission(long id, UserPermissionUpdateDto userPermissionDto) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             if (userPermissionDto.Id != id) return BadRequest($"ID received {id}, but ID in object is {userPermissionDto.Id}"); 
  
@@ -139,11 +143,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/userPermissions/{id} 
         [Route("userPermissions/{id}")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteByID(long id) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             csUserPermission userPermission = new csUserPermission(); 
             clsFault fault = userPermission.GetByID(id, requester); if (!fault.isOK) return NotFound(fault.Message); 
@@ -155,11 +160,12 @@ namespace TargCCOrders.WebAPI.Controllers
         // DELETE api/userPermissions/batch 
         [Route("userPermissions/batch")] 
         [HttpDelete] 
-        //[Authorize] //TODO: enable when auth is configured
+        [Authorize(Policy = "AdminUI")]
         public ActionResult DeleteBatch([FromBody] long[] ids) 
         { 
-            clsRequester requester = new clsRequester("*", "View", true); //TODO: replace with JWT/ticket authentication 
-            requester.CallingFunctionWithinApplication = "WebAPI"; 
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
  
             var errors = new System.Collections.Generic.List<string>(); 
             var deleted = 0; 

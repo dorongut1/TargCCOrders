@@ -30,5 +30,16 @@ appsettings.Production.json
 _to_delete/
 zzPreviousRole_Backup*
 
+# ── ארטיפקטים של סשן עבודה — אסור שייכנסו לריפו ──────
+# _token.txt מכיל JWT חי עם כרטיס TargCC מוצפן בתוכו
+_token.txt
+_api_out*.log
+_api_err*.log
+_build.log
+# גיבוי הקונטרולרים לפני הנעילה — git עצמו הוא הגיבוי
+WebAPI/_backup_controllers_*/
+Database/_lockdown_*.ps1
+Database/_whoLocks.ps1
+
 # ── קבצי עזר גדולים (האקסל המקורי — גיבוי, לא קוד) ──
 *.xlsx
