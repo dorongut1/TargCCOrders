@@ -4,6 +4,10 @@ import { api } from './client';
 
 export interface EnumOption {
   value: number;
+  /** English enum member name, e.g. "New". Stable across regenerations —
+   *  match on this, never on `value`. */
+  name: string;
+  /** Hebrew display text from c_Enumeration.locText. */
   label: string;
 }
 

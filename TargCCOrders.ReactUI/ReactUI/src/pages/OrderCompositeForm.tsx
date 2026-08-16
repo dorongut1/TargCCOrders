@@ -25,7 +25,7 @@ import { ProductApi } from '../api/ProductApi';
 import { PricingApi } from '../api/PricingApi';
 import { OrderCompositeApi, type CompositeLinePayload } from '../api/OrderCompositeApi';
 import { useBusinessSettings } from '../hooks/useBusinessSettings';
-import { useEnumValues } from '../hooks/useEnumValues';
+import { useEnumValues, useEnumValueByName } from '../hooks/useEnumValues';
 import { useNotification } from '../contexts/NotificationContext';
 import useTranslation from '../i18n/useTranslation';
 import type { OrderHeader } from '../types/OrderHeader';
@@ -133,11 +133,33 @@ export default function OrderCompositeForm() {
       orderNumber: 0,
       fkCustomerId: 0,
       orderDate: nowLocalDateTime(),
-      enmOrderStatus: 1,
+      // Resolved by name below once the enum list arrives. Do NOT put a literal
+      // here: TargCC numbers enum members alphabetically, and 1 is Cancelled.
+      enmOrderStatus: undefined,
     },
   });
 
   const selectedCustomerId = watch('fkCustomerId');
+
+  // Enum defaults for a NEW order, resolved by name so they survive
+  // regeneration. Until the enum list loads these are undefined and the effect
+  // below simply doesn't fire — better a blank select for a moment than a
+  // silently wrong status.
+  const statusNew = useEnumValueByName('OrderStatus', 'New');
+  const paymentPending = useEnumValueByName('PaymentStatus', 'Pending');
+  const currentStatus = watch('enmOrderStatus');
+
+  useEffect(() => {
+    if (isEditMode) return;
+    if (currentStatus === undefined && statusNew !== undefined) {
+      setValue('enmOrderStatus', statusNew);
+    }
+  }, [isEditMode, currentStatus, statusNew, setValue]);
+
+  useEffect(() => {
+    if (isEditMode || paymentPending === undefined) return;
+    setValue('enmPaymentStatus', paymentPending);
+  }, [isEditMode, paymentPending, setValue]);
 
   // Prefill order number on create
   useEffect(() => {

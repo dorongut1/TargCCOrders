@@ -71,6 +71,8 @@ import { entityRoutes, sidebarGroups } from './routes';
 import useTranslation from './i18n/useTranslation';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
+import UserAdminList from './pages/UserAdminList';
+import ChangeMyPassword from './pages/ChangeMyPassword';
 
 // Lazy-load all page components
 const pages = import.meta.glob('./pages/*.tsx') as Record<string, () => Promise<{ default: React.ComponentType }>>;
@@ -682,6 +684,11 @@ export default function App() {
         <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            {/* Dashboard was reachable only at "/". A direct hit or bookmark on
+                /dashboard rendered a blank page with no console error. */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/users" element={<UserAdminList />} />
+            <Route path="/change-password" element={<ChangeMyPassword />} />
             {entityRoutes.map((route) => {
               const comps = pageComponents[route.entity];
               if (!comps) return null;

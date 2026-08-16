@@ -40,6 +40,8 @@ _build.log
 WebAPI/_backup_controllers_*/
 Database/_lockdown_*.ps1
 Database/_whoLocks.ps1
+_commitmsg.txt
+_reactbuild.log
 
 # ── קבצי עזר גדולים (האקסל המקורי — גיבוי, לא קוד) ──
 *.xlsx

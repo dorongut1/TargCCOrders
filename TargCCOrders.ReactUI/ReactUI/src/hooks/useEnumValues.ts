@@ -21,3 +21,20 @@ export function useEnumLabel(enumType: string, value: number): string {
   return match?.label || String(value);
 }
 
+/**
+ * Numeric value for an enum member, looked up by its English name.
+ *
+ * TargCC emits enum members in alphabetical order, so inserting one value
+ * renumbers every member after it. A literal like `enmOrderStatus: 1` is
+ * therefore only correct until the next regeneration — and in this codebase it
+ * was already wrong: 1 is Cancelled, not New, which is why saved orders were
+ * coming out cancelled. Always resolve defaults through this.
+ *
+ * Returns undefined while the enum list is still loading, so callers can hold
+ * off rather than write a wrong value.
+ */
+export function useEnumValueByName(enumType: string, name: string): number | undefined {
+  const options = useEnumValues(enumType);
+  return options.find((o) => o.name?.toLowerCase() === name.toLowerCase())?.value;
+}
+

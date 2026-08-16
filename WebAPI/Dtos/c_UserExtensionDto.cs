@@ -29,7 +29,12 @@ namespace TargCCOrders.WebAPI.Dtos
                 Country = user.Country, 
                 PhoneNumber = user.PhoneNumber, 
                 Email = user.Email, 
-                PasswordHashed = user.PasswordHashed, 
+                // Password material is never serialised to a client. The
+                // generated mapper copied the SHA256 hash and the previous-
+                // password history straight into the response; combined with the
+                // controller having had no [Authorize], that put hashes on the
+                // open network. Blanked here so no caller can reintroduce it.
+                PasswordHashed = "", 
                 DatePasswordChanged = user.DatePasswordChanged, 
                 EnmType = user.Type, 
                 IDinType = user.IDinType, 
@@ -39,7 +44,7 @@ namespace TargCCOrders.WebAPI.Dtos
                 IsDisabled = user.IsDisabled, 
                 ExpiryDate = user.ExpiryDate, 
                 Comments = user.Comments, 
-                LastPasswords = user.LastPasswords, 
+                LastPasswords = "", 
                 Applications = user.Applications, 
                 EnmLanguage = user.Language, 
                 IsLockedOut = user.IsLockedOut, 
@@ -48,7 +53,7 @@ namespace TargCCOrders.WebAPI.Dtos
                 RequiresFixedIp = user.RequiresFixedIP, 
                 EnmMessagingMode = user.MessagingMode, 
                 LoggedInIp = user.LoggedInIP, 
-                ApprovalCodeHashed = user.ApprovalCodeHashed, 
+                ApprovalCodeHashed = "", 
                 ApprovalFunctionName = user.ApprovalFunctionName, 
                 ApprovalTime = user.ApprovalTime, 
                 LastSuccessfulLogin = user.LastSuccessfulLogin, 
