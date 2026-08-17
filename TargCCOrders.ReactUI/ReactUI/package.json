@@ -30,13 +30,15 @@
     "cors": "^2.8.5",
     "express": "^4.22.1",
     "typescript": "^5.7.2",
-    "vite": "^6.2.6"
+    "vite": "^6.2.6",
+    "vitest": "^2.1.9"
   },
   "scripts": {
     "dev": "vite",
     "mock-api": "node mock-server.js",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test": "vitest run"
   }
 }
