@@ -89,6 +89,7 @@ ALTER AUTHORIZATION ON DATABASE::TargCCOrdersNew TO sa;
 ```
 
 **צור משתמש SQL ייעודי לאפליקציה** (אל תשתמש ב-sa):
+
 ```sql
 CREATE LOGIN TargCCApp WITH PASSWORD = '<סיסמה חזקה>';
 USE TargCCOrdersNew;
@@ -97,6 +98,44 @@ ALTER ROLE db_datareader ADD MEMBER TargCCApp;
 GRANT EXECUTE TO TargCCApp;
 ```
 TargCC עובד דרך פרוצדורות בלבד, ולכן `EXECUTE` מספיק — וזה גם מאובטח יותר.
+
+**חלופה פשוטה יותר — Integrated Security.** במחרוזת החיבור משאירים שלושה חלקים
+בלבד (`localhost~TargCCOrdersNew~500`), וה-App Pool ניגש בזהות שלו. אין סיסמה
+בקובץ טקסט. במקרה כזה:
+```sql
+CREATE LOGIN [IIS APPPOOL\<שם-האתר>] FROM WINDOWS;
+USE TargCCOrdersNew;
+CREATE USER [IIS APPPOOL\<שם-האתר>] FOR LOGIN [IIS APPPOOL\<שם-האתר>];
+ALTER ROLE db_datareader ADD MEMBER [IIS APPPOOL\<שם-האתר>];
+GRANT EXECUTE TO [IIS APPPOOL\<שם-האתר>];
+```
+
+### ⚠️ SQLCLR — חובה, ולא ניתן לדלג
+
+**TargCC מסרב לבנות מחרוזת חיבור כלל כל עוד SQLCLR מושבת.** השגיאה נזרקת
+ב-`MyController.CreateDBConnString`, לפני כל שאילתה:
+
+```
+This application requires CLR to be enabled. Please contact your DBA.
+```
+
+**התסמין מבלבל במיוחד:** לוג העלייה מדווח `Database connection OK - 39 tables
+visible`, ובכל זאת **כל** נקודת קצה מחזירה שגיאה. במופע SQL חדש CLR כבוי
+כברירת מחדל.
+
+```sql
+EXEC sp_configure 'show advanced options', 1; RECONFIGURE;
+EXEC sp_configure 'clr enabled', 1;           RECONFIGURE;
+SELECT name, value_in_use FROM sys.configurations WHERE name LIKE 'clr%';
+```
+`clr enabled` חייב להיות `1`. אין צורך להפעיל מחדש את SQL Server.
+
+אם `clr strict security = 1` (ברירת מחדל ב-SQL 2017+) ה-assembly של ה-Audit
+של TargCC עלול להיחסם. אם ה-Audit לא מתפקד:
+```sql
+ALTER DATABASE TargCCOrdersNew SET TRUSTWORTHY ON;
+EXEC sp_changedbowner 'sa';
+```
 
 **בדיקה שהשלב הצליח:**
 ```sql
