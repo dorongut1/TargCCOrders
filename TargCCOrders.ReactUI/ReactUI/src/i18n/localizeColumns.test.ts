@@ -24,8 +24,8 @@ describe('localizeColumns', () => {
   });
 
   it('supplies a header when the column has none', () => {
-    const out = localizeColumns([{ field: 'fkCustomerId' }]);
-    expect(out[0].headerName).toBe('שם לקוח');
+    const input: { field: string; headerName?: string }[] = [{ field: 'fkCustomerId' }];
+    expect(localizeColumns(input)[0].headerName).toBe('שם לקוח');
   });
 
   it('translates a foreign key to the thing it points at', () => {

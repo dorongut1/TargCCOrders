@@ -32,6 +32,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { localizeColumns } from '../../i18n/localizeColumns';
+import he from '../../i18n/he';
 
 interface AppDataGridProps {
   rows: unknown[];
@@ -193,9 +195,9 @@ function CustomToolbar({ onClearFilters, onAutoSize }: { onClearFilters: () => v
 
 export default function AppDataGrid({
   rows,
-  columns,
+  columns: rawColumns,
   loading = false,
-  title,
+  title: rawTitle,
   entityName,
   getRowId,
   onRowClick,
@@ -223,6 +225,16 @@ export default function AppDataGrid({
 }: AppDataGridProps) {
   const apiRef = useGridApiRef();
   const storageKey = entityName ? `datagrid_${entityName}` : null;
+
+  // Shadowing the raw props on purpose. Every consumer below — the grid, the
+  // CSV export, the Excel export, the heading — then reads the localized
+  // version without a separate edit at each site, so no site can be missed.
+  const columns = useMemo(() => localizeColumns(rawColumns), [rawColumns]);
+  const title = useMemo(() => {
+    if (rawTitle) return rawTitle;
+    if (!entityName) return undefined;
+    return he.entities[entityName as keyof typeof he.entities]?.p;
+  }, [rawTitle, entityName]);
 
   // Load saved state from localStorage
   const savedState = useMemo(() => {
