@@ -31,6 +31,8 @@ import SendIcon from '@mui/icons-material/Send';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useSupplierOrder, useCreateSupplierOrder, useUpdateSupplierOrder } from '../hooks/useSupplierOrder';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { supplierOrderSchema, type SupplierOrderFormData } from '../types/SupplierOrder';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -297,7 +299,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Supplier Order' : cloneFromId ? 'Clone Supplier Order' : 'Add Supplier Order'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.supplierOrder.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.supplierOrder.s}` : `${he.grid.addOf} ${he.entities.supplierOrder.s}`}
         </Typography>
       )}
       <Paper sx={{ p: 3, elevation: embedded ? 0 : undefined }}>
@@ -317,7 +319,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Order Header ID"
+                      label={fieldLabel('fkOrderHeaderId') ?? "Order Header ID"}
                       title="Order Header"
                       autoFocus
                       required
@@ -335,7 +337,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Supplier Email"
+                  label={fieldLabel('supplierEmail') ?? "Supplier Email"}
                   type="email"
                   fullWidth
                   error={Boolean(errors.supplierEmail)}
@@ -350,7 +352,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Email Subject"
+                  label={fieldLabel('emailSubject') ?? "Email Subject"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -367,7 +369,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Email Body"
+                  label={fieldLabel('emailBody') ?? "Email Body"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -384,7 +386,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Email Status"
+                  label={fieldLabel('enmEmailStatus') ?? "Email Status"}
                   select
                   fullWidth
                   required
@@ -407,7 +409,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 16); })()}
-                  label="Sent Date"
+                  label={fieldLabel('sentDate') ?? "Sent Date"}
                   type="datetime-local"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -423,7 +425,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Delivery Method"
+                  label={fieldLabel('enmDeliveryMethod') ?? "Delivery Method"}
                   select
                   fullWidth
                   error={Boolean(errors.enmDeliveryMethod)}
@@ -445,7 +447,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Requested Delivery Date"
+                  label={fieldLabel('requestedDeliveryDate') ?? "Requested Delivery Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -461,7 +463,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Requested Delivery Day"
+                  label={fieldLabel('requestedDeliveryDay') ?? "Requested Delivery Day"}
                   type="text"
                   fullWidth
                   error={Boolean(errors.requestedDeliveryDay)}
@@ -476,7 +478,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -490,10 +492,10 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               <>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" color="text.secondary">
-                  Computed Fields
+                  {he.grid.computedFields}
                 </Typography>
                 <TextField
-                  label="Total Cost"
+                  label={fieldLabel('notes') ?? "Total Cost"}
                   value={existingData.totalCost ?? ''}
                   disabled
                   fullWidth
@@ -502,7 +504,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
             )}
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {isEditMode && existingData && (
                 <Button
@@ -517,7 +519,7 @@ export default function SupplierOrderForm({ embedded, onSuccess }: SupplierOrder
               )}
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/supplierOrders')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

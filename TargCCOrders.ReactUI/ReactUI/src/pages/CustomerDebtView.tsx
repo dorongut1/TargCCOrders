@@ -16,6 +16,8 @@ import Grid from '@mui/material/Grid2';
 import PrintIcon from '@mui/icons-material/Print';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { PermissionGate } from '../contexts/AuthContext';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useCustomerDebt } from '../hooks/useCustomerDebt';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -105,7 +107,7 @@ export default function CustomerDebtView() {
   if (isError || !entity) {
     return (
       <Box p={4}>
-        <Typography color="error">Customer Debt not found.</Typography>
+        <Typography color="error">{he.messages.notFound}</Typography>
       </Box>
     );
   }
@@ -113,23 +115,23 @@ export default function CustomerDebtView() {
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5">Customer Debt Details</Typography>
+        <Typography variant="h5">{he.actions.details}</Typography>
         <Box display="flex" gap={1}>
           <PermissionGate entity="customerDebt" action="write">
             <Button variant="contained" onClick={() => navigate(`/customerDebts/${entity.id}/edit`)}>
-              Edit
+              {he.actions.edit}
             </Button>
           </PermissionGate>
           <PermissionGate entity="customerDebt" action="write">
             <Button variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => navigate(`/customerDebts/new?cloneFrom=${entity.id}`)}>
-              Clone
+              {he.actions.duplicate}
             </Button>
           </PermissionGate>
           <Button variant="outlined" onClick={() => navigate('/customerDebts')}>
-            Back to List
+            {he.actions.backToList}
           </Button>
           <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => window.print()} className="no-print">
-            Print
+            {he.actions.print}
           </Button>
         </Box>
       </Box>
@@ -138,9 +140,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                ID
+                {fieldLabel('id') ?? 'ID'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy ID" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.id, 'ID')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -155,7 +157,7 @@ export default function CustomerDebtView() {
               <Typography variant="caption" color="text.secondary" title="Customer">
                 Customer ID
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Customer ID" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.fkCustomerId, 'Customer ID')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -172,7 +174,7 @@ export default function CustomerDebtView() {
               <Typography variant="caption" color="text.secondary" title="Order Header">
                 Order Header ID
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Order Header ID" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.fkOrderHeaderId, 'Order Header ID')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -189,9 +191,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Debt Amount
+                {fieldLabel('debtAmount') ?? 'Debt Amount'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Debt Amount" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.debtAmount, 'Debt Amount')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -204,9 +206,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Paid Amount
+                {fieldLabel('paidAmount') ?? 'Paid Amount'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Paid Amount" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.paidAmount, 'Paid Amount')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -219,9 +221,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Remaining Amount
+                {fieldLabel('remainingAmount') ?? 'Remaining Amount'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Remaining Amount" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.remainingAmount, 'Remaining Amount')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -234,9 +236,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Debt Date
+                {fieldLabel('debtDate') ?? 'Debt Date'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Debt Date" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.debtDate, 'Debt Date')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -249,9 +251,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Due Date
+                {fieldLabel('dueDate') ?? 'Due Date'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Due Date" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.dueDate, 'Due Date')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -264,9 +266,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Debt Status
+                {fieldLabel('enmDebtStatus') ?? 'Debt Status'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Debt Status" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.enmDebtStatus, 'Debt Status')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -279,9 +281,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Notes
+                {fieldLabel('notes') ?? 'Notes'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Notes" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.notes, 'Notes')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -294,9 +296,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Needs Attention
+                {fieldLabel('needsAttention') ?? 'Needs Attention'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Needs Attention" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.needsAttention, 'Needs Attention')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -304,7 +306,7 @@ export default function CustomerDebtView() {
             </Box>
             <Box>
               <Chip
-                label={entity.needsAttention ? 'Yes' : 'No'}
+                label={entity.needsAttention ? he.messages.yes : he.messages.no}
                 color={entity.needsAttention ? 'success' : 'default'}
                 size="small"
               />
@@ -313,9 +315,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Product Types
+                {fieldLabel('productTypes') ?? 'Product Types'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Product Types" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.productTypes, 'Product Types')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -328,9 +330,9 @@ export default function CustomerDebtView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Delivery Date
+                {fieldLabel('deliveryDate') ?? 'Delivery Date'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Delivery Date" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.deliveryDate, 'Delivery Date')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -345,8 +347,8 @@ export default function CustomerDebtView() {
 
       <Box sx={{ mt: 3 }}>
         <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tab label="Details" />
-          <Tab label="History" />
+          <Tab label={he.actions.details} />
+          <Tab label={he.grid.history} />
         </Tabs>
 
         {/* History tab — fetches from c_AuditIndexed */}

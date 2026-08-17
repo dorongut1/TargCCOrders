@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useBeehiveBuyerTracking, useCreateBeehiveBuyerTracking, useUpdateBeehiveBuyerTracking } from '../hooks/useBeehiveBuyerTracking';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { beehiveBuyerTrackingSchema, type BeehiveBuyerTrackingFormData } from '../types/BeehiveBuyerTracking';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useQuery } from '@tanstack/react-query';
@@ -216,7 +218,7 @@ export default function BeehiveBuyerTrackingForm({ embedded, onSuccess }: Beehiv
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Beehive Buyer Tracking' : cloneFromId ? 'Clone Beehive Buyer Tracking' : 'Add Beehive Buyer Tracking'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.beehiveBuyerTracking.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.beehiveBuyerTracking.s}` : `${he.grid.addOf} ${he.entities.beehiveBuyerTracking.s}`}
         </Typography>
       )}
       <Paper sx={{ p: 3, elevation: embedded ? 0 : undefined }}>
@@ -236,7 +238,7 @@ export default function BeehiveBuyerTrackingForm({ embedded, onSuccess }: Beehiv
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Customer ID"
+                      label={fieldLabel('fkCustomerId') ?? "Customer ID"}
                       title="Customer"
                       autoFocus
                       required
@@ -255,7 +257,7 @@ export default function BeehiveBuyerTrackingForm({ embedded, onSuccess }: Beehiv
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Last Order Date"
+                  label={fieldLabel('lastOrderDate') ?? "Last Order Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -271,7 +273,7 @@ export default function BeehiveBuyerTrackingForm({ embedded, onSuccess }: Beehiv
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Beehive Quantity"
+                  label={fieldLabel('beehiveQuantity') ?? "Beehive Quantity"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.beehiveQuantity)}
@@ -286,7 +288,7 @@ export default function BeehiveBuyerTrackingForm({ embedded, onSuccess }: Beehiv
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Reminder Month"
+                  label={fieldLabel('reminderMonth') ?? "Reminder Month"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.reminderMonth)}
@@ -301,7 +303,7 @@ export default function BeehiveBuyerTrackingForm({ embedded, onSuccess }: Beehiv
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -315,10 +317,10 @@ export default function BeehiveBuyerTrackingForm({ embedded, onSuccess }: Beehiv
               <>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" color="text.secondary">
-                  Computed Fields
+                  {he.grid.computedFields}
                 </Typography>
                 <TextField
-                  label="Is Relevant"
+                  label={fieldLabel('notes') ?? "Is Relevant"}
                   value={existingData.isRelevant ? 'Yes' : 'No'}
                   disabled
                   fullWidth
@@ -327,11 +329,11 @@ export default function BeehiveBuyerTrackingForm({ embedded, onSuccess }: Beehiv
             )}
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/beehiveBuyerTrackings')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

@@ -16,6 +16,8 @@ import Grid from '@mui/material/Grid2';
 import PrintIcon from '@mui/icons-material/Print';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { PermissionGate } from '../contexts/AuthContext';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProduct } from '../hooks/useProduct';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -107,7 +109,7 @@ export default function ProductView() {
   if (isError || !entity) {
     return (
       <Box p={4}>
-        <Typography color="error">Product not found.</Typography>
+        <Typography color="error">{he.messages.notFound}</Typography>
       </Box>
     );
   }
@@ -115,23 +117,23 @@ export default function ProductView() {
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5">Product Details</Typography>
+        <Typography variant="h5">{he.actions.details}</Typography>
         <Box display="flex" gap={1}>
           <PermissionGate entity="product" action="write">
             <Button variant="contained" onClick={() => navigate(`/products/${entity.id}/edit`)}>
-              Edit
+              {he.actions.edit}
             </Button>
           </PermissionGate>
           <PermissionGate entity="product" action="write">
             <Button variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => navigate(`/products/new?cloneFrom=${entity.id}`)}>
-              Clone
+              {he.actions.duplicate}
             </Button>
           </PermissionGate>
           <Button variant="outlined" onClick={() => navigate('/products')}>
-            Back to List
+            {he.actions.backToList}
           </Button>
           <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => window.print()} className="no-print">
-            Print
+            {he.actions.print}
           </Button>
         </Box>
       </Box>
@@ -140,9 +142,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                ID
+                {fieldLabel('id') ?? 'ID'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy ID" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.id, 'ID')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -155,9 +157,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Product Code
+                {fieldLabel('productCode') ?? 'Product Code'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Product Code" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.productCode, 'Product Code')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -170,9 +172,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Product Name
+                {fieldLabel('productName') ?? 'Product Name'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Product Name" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.productName, 'Product Name')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -185,9 +187,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Category
+                {fieldLabel('enmCategory') ?? 'Category'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Category" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.enmCategory, 'Category')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -200,9 +202,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Unit Of Measure
+                {fieldLabel('unitOfMeasure') ?? 'Unit Of Measure'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Unit Of Measure" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.unitOfMeasure, 'Unit Of Measure')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -215,9 +217,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Notes
+                {fieldLabel('notes') ?? 'Notes'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Notes" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.notes, 'Notes')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -230,9 +232,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Is Active
+                {fieldLabel('isActive') ?? 'Is Active'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Is Active" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.isActive, 'Is Active')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -240,7 +242,7 @@ export default function ProductView() {
             </Box>
             <Box>
               <Chip
-                label={entity.isActive ? 'Yes' : 'No'}
+                label={entity.isActive ? he.messages.yes : he.messages.no}
                 color={entity.isActive ? 'success' : 'default'}
                 size="small"
               />
@@ -249,9 +251,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Current Stock
+                {fieldLabel('currentStock') ?? 'Current Stock'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Current Stock" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.currentStock, 'Current Stock')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -264,9 +266,9 @@ export default function ProductView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Base Cost
+                {fieldLabel('baseCost') ?? 'Base Cost'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Base Cost" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.baseCost, 'Base Cost')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -281,10 +283,10 @@ export default function ProductView() {
 
       <Box sx={{ mt: 3 }}>
         <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tab label="Details" />
-          <Tab label="Order Lines" />
-          <Tab label="Product Prices" />
-          <Tab label="History" />
+          <Tab label={he.actions.details} />
+          <Tab label={he.entities.orderLine.p} />
+          <Tab label={he.entities.productPrice.p} />
+          <Tab label={he.grid.history} />
         </Tabs>
         {activeTab === 1 && (
           <Box sx={{ pt: 2 }}>

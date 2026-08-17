@@ -16,6 +16,8 @@ import Grid from '@mui/material/Grid2';
 import PrintIcon from '@mui/icons-material/Print';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { PermissionGate } from '../contexts/AuthContext';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useOrderHeader } from '../hooks/useOrderHeader';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -135,7 +137,7 @@ export default function OrderHeaderView() {
   if (isError || !entity) {
     return (
       <Box p={4}>
-        <Typography color="error">Order Header not found.</Typography>
+        <Typography color="error">{he.messages.notFound}</Typography>
       </Box>
     );
   }
@@ -143,23 +145,23 @@ export default function OrderHeaderView() {
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5">Order Header Details</Typography>
+        <Typography variant="h5">{he.actions.details}</Typography>
         <Box display="flex" gap={1}>
           <PermissionGate entity="orderHeader" action="write">
             <Button variant="contained" onClick={() => navigate(`/orderHeaders/${entity.id}/edit`)}>
-              Edit
+              {he.actions.edit}
             </Button>
           </PermissionGate>
           <PermissionGate entity="orderHeader" action="write">
             <Button variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => navigate(`/orderHeaders/new?cloneFrom=${entity.id}`)}>
-              Clone
+              {he.actions.duplicate}
             </Button>
           </PermissionGate>
           <Button variant="outlined" onClick={() => navigate('/orderHeaders')}>
-            Back to List
+            {he.actions.backToList}
           </Button>
           <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => window.print()} className="no-print">
-            Print
+            {he.actions.print}
           </Button>
         </Box>
       </Box>
@@ -168,9 +170,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                ID
+                {fieldLabel('id') ?? 'ID'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy ID" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.id, 'ID')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -183,9 +185,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Order Number
+                {fieldLabel('orderNumber') ?? 'Order Number'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Order Number" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.orderNumber, 'Order Number')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -200,7 +202,7 @@ export default function OrderHeaderView() {
               <Typography variant="caption" color="text.secondary" title="Customer">
                 Customer ID
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Customer ID" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.fkCustomerId, 'Customer ID')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -215,9 +217,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Order Date
+                {fieldLabel('orderDate') ?? 'Order Date'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Order Date" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.orderDate, 'Order Date')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -230,9 +232,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Total Amount
+                {fieldLabel('totalAmount') ?? 'Total Amount'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Total Amount" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.totalAmount, 'Total Amount')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -247,7 +249,7 @@ export default function OrderHeaderView() {
               <Typography variant="caption" color="text.secondary" title="VAT Amount">
                 VATAmount
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy VATAmount" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.vatAmount, 'VATAmount')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -260,9 +262,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Total With VAT
+                {fieldLabel('totalWithVat') ?? 'Total With VAT'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Total With VAT" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.totalWithVat, 'Total With VAT')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -275,9 +277,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Payment Method
+                {fieldLabel('enmPaymentMethod') ?? 'Payment Method'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Payment Method" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.enmPaymentMethod, 'Payment Method')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -290,9 +292,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Payment Status
+                {fieldLabel('enmPaymentStatus') ?? 'Payment Status'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Payment Status" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.enmPaymentStatus, 'Payment Status')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -305,9 +307,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Payment Date
+                {fieldLabel('paymentDate') ?? 'Payment Date'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Payment Date" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.paymentDate, 'Payment Date')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -320,9 +322,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Invoice Number
+                {fieldLabel('invoiceNumber') ?? 'Invoice Number'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Invoice Number" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.invoiceNumber, 'Invoice Number')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -335,9 +337,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Delivery Method
+                {fieldLabel('enmDeliveryMethod') ?? 'Delivery Method'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Delivery Method" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.enmDeliveryMethod, 'Delivery Method')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -350,9 +352,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Delivery Date
+                {fieldLabel('deliveryDate') ?? 'Delivery Date'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Delivery Date" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.deliveryDate, 'Delivery Date')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -365,9 +367,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Delivery Day
+                {fieldLabel('enmDeliveryDay') ?? 'Delivery Day'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Delivery Day" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.enmDeliveryDay, 'Delivery Day')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -380,9 +382,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Order Status
+                {fieldLabel('enmOrderStatus') ?? 'Order Status'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Order Status" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.enmOrderStatus, 'Order Status')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -395,9 +397,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Notes
+                {fieldLabel('notes') ?? 'Notes'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Notes" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.notes, 'Notes')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -412,7 +414,7 @@ export default function OrderHeaderView() {
               <Typography variant="caption" color="text.secondary" title="Notes 2">
                 Notes2
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Notes2" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.notes2, 'Notes2')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -425,9 +427,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Order Month
+                {fieldLabel('orderMonth') ?? 'Order Month'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Order Month" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.orderMonth, 'Order Month')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -440,9 +442,9 @@ export default function OrderHeaderView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Quarter
+                {fieldLabel('quarter') ?? 'Quarter'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Quarter" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.quarter, 'Quarter')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -457,12 +459,12 @@ export default function OrderHeaderView() {
 
       <Box sx={{ mt: 3 }}>
         <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tab label="Details" />
-          <Tab label="Customer Debts" />
-          <Tab label="Deliveries" />
-          <Tab label="Order Lines" />
-          <Tab label="Supplier Orders" />
-          <Tab label="History" />
+          <Tab label={he.actions.details} />
+          <Tab label={he.entities.customerDebt.p} />
+          <Tab label={he.entities.delivery.p} />
+          <Tab label={he.entities.orderLine.p} />
+          <Tab label={he.entities.supplierOrder.p} />
+          <Tab label={he.grid.history} />
         </Tabs>
         {activeTab === 1 && (
           <Box sx={{ pt: 2 }}>

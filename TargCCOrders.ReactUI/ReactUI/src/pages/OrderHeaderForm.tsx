@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useOrderHeader, useCreateOrderHeader, useUpdateOrderHeader } from '../hooks/useOrderHeader';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { orderHeaderSchema, type OrderHeaderFormData } from '../types/OrderHeader';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -239,7 +241,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Order Header' : cloneFromId ? 'Clone Order Header' : 'Add Order Header'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.orderHeader.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.orderHeader.s}` : `${he.grid.addOf} ${he.entities.orderHeader.s}`}
         </Typography>
       )}
       {cloneFromId && (
@@ -258,7 +260,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Order Number"
+                  label={fieldLabel('orderNumber') ?? "Order Number"}
                   type="number"
                   fullWidth
                   autoFocus
@@ -282,7 +284,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Customer ID"
+                      label={fieldLabel('fkCustomerId') ?? "Customer ID"}
                       title="Customer"
                       required
                       error={Boolean(errors.fkCustomerId)}
@@ -300,7 +302,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 16); })()}
-                  label="Order Date"
+                  label={fieldLabel('orderDate') ?? "Order Date"}
                   type="datetime-local"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -317,7 +319,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Payment Method"
+                  label={fieldLabel('enmPaymentMethod') ?? "Payment Method"}
                   select
                   fullWidth
                   error={Boolean(errors.enmPaymentMethod)}
@@ -338,7 +340,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Payment Status"
+                  label={fieldLabel('enmPaymentStatus') ?? "Payment Status"}
                   select
                   fullWidth
                   error={Boolean(errors.enmPaymentStatus)}
@@ -360,7 +362,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Payment Date"
+                  label={fieldLabel('paymentDate') ?? "Payment Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -376,7 +378,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Invoice Number"
+                  label={fieldLabel('invoiceNumber') ?? "Invoice Number"}
                   type="text"
                   fullWidth
                   error={Boolean(errors.invoiceNumber)}
@@ -391,7 +393,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Delivery Method"
+                  label={fieldLabel('enmDeliveryMethod') ?? "Delivery Method"}
                   select
                   fullWidth
                   error={Boolean(errors.enmDeliveryMethod)}
@@ -413,7 +415,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Delivery Date"
+                  label={fieldLabel('deliveryDate') ?? "Delivery Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -429,7 +431,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Delivery Day"
+                  label={fieldLabel('enmDeliveryDay') ?? "Delivery Day"}
                   select
                   fullWidth
                   error={Boolean(errors.enmDeliveryDay)}
@@ -450,7 +452,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Order Status"
+                  label={fieldLabel('enmOrderStatus') ?? "Order Status"}
                   select
                   fullWidth
                   error={Boolean(errors.enmOrderStatus)}
@@ -471,7 +473,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -488,7 +490,7 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes2"
+                  label={fieldLabel('notes2') ?? "Notes2"}
                   title="Notes 2"
                   type="textarea"
                   multiline
@@ -503,34 +505,34 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
               <>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" color="text.secondary">
-                  Computed Fields
+                  {he.grid.computedFields}
                 </Typography>
                 <TextField
-                  label="Total Amount"
+                  label={fieldLabel('notes2') ?? "Total Amount"}
                   value={existingData.totalAmount ?? ''}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="VATAmount"
+                  label={fieldLabel('notes2') ?? "VATAmount"}
                   value={existingData.vatAmount ?? ''}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Total With VAT"
+                  label={fieldLabel('notes2') ?? "Total With VAT"}
                   value={existingData.totalWithVat ?? ''}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Order Month"
+                  label={fieldLabel('notes2') ?? "Order Month"}
                   value={existingData.orderMonth ?? ''}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Quarter"
+                  label={fieldLabel('notes2') ?? "Quarter"}
                   value={existingData.quarter ?? ''}
                   disabled
                   fullWidth
@@ -539,11 +541,11 @@ export default function OrderHeaderForm({ embedded, onSuccess }: OrderHeaderForm
             )}
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/orderHeaders')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

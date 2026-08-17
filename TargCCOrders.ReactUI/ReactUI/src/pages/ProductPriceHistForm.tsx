@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useProductPriceHist, useCreateProductPriceHist, useUpdateProductPriceHist } from '../hooks/useProductPriceHist';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { productPriceHistSchema, type ProductPriceHistFormData } from '../types/ProductPriceHist';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -225,7 +227,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Product Price Hist' : cloneFromId ? 'Clone Product Price Hist' : 'Add Product Price Hist'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.productPriceHist.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.productPriceHist.s}` : `${he.grid.addOf} ${he.entities.productPriceHist.s}`}
         </Typography>
       )}
       <Paper sx={{ p: 3, elevation: embedded ? 0 : undefined }}>
@@ -238,7 +240,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Product ID"
+                  label={fieldLabel('productId') ?? "Product ID"}
                   type="number"
                   fullWidth
                   autoFocus
@@ -255,7 +257,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Customer Type"
+                  label={fieldLabel('enmCustomerType') ?? "Customer Type"}
                   select
                   fullWidth
                   required
@@ -277,7 +279,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Base Cost"
+                  label={fieldLabel('baseCost') ?? "Base Cost"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.baseCost)}
@@ -292,7 +294,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Selling Price"
+                  label={fieldLabel('sellingPrice') ?? "Selling Price"}
                   type="number"
                   fullWidth
                   required
@@ -308,7 +310,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Min Quantity"
+                  label={fieldLabel('minQuantity') ?? "Min Quantity"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.minQuantity)}
@@ -323,7 +325,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Discount Percent"
+                  label={fieldLabel('discountPercent') ?? "Discount Percent"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.discountPercent)}
@@ -339,7 +341,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Valid From"
+                  label={fieldLabel('validFrom') ?? "Valid From"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -357,7 +359,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Valid To"
+                  label={fieldLabel('validTo') ?? "Valid To"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -375,7 +377,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 16); })()}
-                  label="Archived Date"
+                  label={fieldLabel('archivedDate') ?? "Archived Date"}
                   type="datetime-local"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -391,7 +393,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Archived Reason"
+                  label={fieldLabel('archivedReason') ?? "Archived Reason"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -408,7 +410,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Original Price ID"
+                  label={fieldLabel('originalPriceId') ?? "Original Price ID"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.originalPriceId)}
@@ -423,7 +425,7 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -435,11 +437,11 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
             />
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/productPriceHists')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useCustomerDebt, useCreateCustomerDebt, useUpdateCustomerDebt } from '../hooks/useCustomerDebt';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { customerDebtSchema, type CustomerDebtFormData } from '../types/CustomerDebt';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -235,7 +237,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Customer Debt' : cloneFromId ? 'Clone Customer Debt' : 'Add Customer Debt'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.customerDebt.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.customerDebt.s}` : `${he.grid.addOf} ${he.entities.customerDebt.s}`}
         </Typography>
       )}
       <Paper sx={{ p: 3, elevation: embedded ? 0 : undefined }}>
@@ -255,7 +257,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Customer ID"
+                      label={fieldLabel('fkCustomerId') ?? "Customer ID"}
                       title="Customer"
                       autoFocus
                       required
@@ -280,7 +282,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Order Header ID"
+                      label={fieldLabel('fkOrderHeaderId') ?? "Order Header ID"}
                       title="Order Header"
                       error={Boolean(errors.fkOrderHeaderId)}
                       helperText={errors.fkOrderHeaderId?.message}
@@ -296,7 +298,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Debt Amount"
+                  label={fieldLabel('debtAmount') ?? "Debt Amount"}
                   type="number"
                   fullWidth
                   required
@@ -312,7 +314,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Paid Amount"
+                  label={fieldLabel('paidAmount') ?? "Paid Amount"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.paidAmount)}
@@ -328,7 +330,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Debt Date"
+                  label={fieldLabel('debtDate') ?? "Debt Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -346,7 +348,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Due Date"
+                  label={fieldLabel('dueDate') ?? "Due Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -362,7 +364,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Debt Status"
+                  label={fieldLabel('enmDebtStatus') ?? "Debt Status"}
                   select
                   fullWidth
                   error={Boolean(errors.enmDebtStatus)}
@@ -383,7 +385,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -400,7 +402,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Product Types"
+                  label={fieldLabel('productTypes') ?? "Product Types"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -418,7 +420,7 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Delivery Date"
+                  label={fieldLabel('deliveryDate') ?? "Delivery Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -431,16 +433,16 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
               <>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" color="text.secondary">
-                  Computed Fields
+                  {he.grid.computedFields}
                 </Typography>
                 <TextField
-                  label="Remaining Amount"
+                  label={fieldLabel('deliveryDate') ?? "Remaining Amount"}
                   value={existingData.remainingAmount ?? ''}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Needs Attention"
+                  label={fieldLabel('deliveryDate') ?? "Needs Attention"}
                   value={existingData.needsAttention ? 'Yes' : 'No'}
                   disabled
                   fullWidth
@@ -449,11 +451,11 @@ export default function CustomerDebtForm({ embedded, onSuccess }: CustomerDebtFo
             )}
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/customerDebts')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

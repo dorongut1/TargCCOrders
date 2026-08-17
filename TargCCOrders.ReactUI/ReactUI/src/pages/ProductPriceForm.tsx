@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useProductPrice, useCreateProductPrice, useUpdateProductPrice } from '../hooks/useProductPrice';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { productPriceSchema, type ProductPriceFormData } from '../types/ProductPrice';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -221,7 +223,7 @@ export default function ProductPriceForm({ embedded, onSuccess }: ProductPriceFo
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Product Price' : cloneFromId ? 'Clone Product Price' : 'Add Product Price'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.productPrice.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.productPrice.s}` : `${he.grid.addOf} ${he.entities.productPrice.s}`}
         </Typography>
       )}
       <Paper sx={{ p: 3, elevation: embedded ? 0 : undefined }}>
@@ -241,7 +243,7 @@ export default function ProductPriceForm({ embedded, onSuccess }: ProductPriceFo
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Product ID"
+                      label={fieldLabel('fkProductId') ?? "Product ID"}
                       title="Product"
                       autoFocus
                       required
@@ -259,7 +261,7 @@ export default function ProductPriceForm({ embedded, onSuccess }: ProductPriceFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Customer Type"
+                  label={fieldLabel('enmCustomerType') ?? "Customer Type"}
                   select
                   fullWidth
                   required
@@ -281,7 +283,7 @@ export default function ProductPriceForm({ embedded, onSuccess }: ProductPriceFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Selling Price"
+                  label={fieldLabel('sellingPrice') ?? "Selling Price"}
                   type="number"
                   fullWidth
                   required
@@ -297,7 +299,7 @@ export default function ProductPriceForm({ embedded, onSuccess }: ProductPriceFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Min Quantity"
+                  label={fieldLabel('minQuantity') ?? "Min Quantity"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.minQuantity)}
@@ -312,7 +314,7 @@ export default function ProductPriceForm({ embedded, onSuccess }: ProductPriceFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Discount Percent"
+                  label={fieldLabel('discountPercent') ?? "Discount Percent"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.discountPercent)}
@@ -327,7 +329,7 @@ export default function ProductPriceForm({ embedded, onSuccess }: ProductPriceFo
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -339,11 +341,11 @@ export default function ProductPriceForm({ embedded, onSuccess }: ProductPriceFo
             />
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/productPrices')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

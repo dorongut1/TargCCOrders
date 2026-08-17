@@ -16,6 +16,8 @@ import Grid from '@mui/material/Grid2';
 import PrintIcon from '@mui/icons-material/Print';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { PermissionGate } from '../contexts/AuthContext';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useBeehiveBuyerTracking } from '../hooks/useBeehiveBuyerTracking';
 import { Tabs, Tab } from '@mui/material';
@@ -83,7 +85,7 @@ export default function BeehiveBuyerTrackingView() {
   if (isError || !entity) {
     return (
       <Box p={4}>
-        <Typography color="error">Beehive Buyer Tracking not found.</Typography>
+        <Typography color="error">{he.messages.notFound}</Typography>
       </Box>
     );
   }
@@ -91,23 +93,23 @@ export default function BeehiveBuyerTrackingView() {
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5">Beehive Buyer Tracking Details</Typography>
+        <Typography variant="h5">{he.actions.details}</Typography>
         <Box display="flex" gap={1}>
           <PermissionGate entity="beehiveBuyerTracking" action="write">
             <Button variant="contained" onClick={() => navigate(`/beehiveBuyerTrackings/${entity.id}/edit`)}>
-              Edit
+              {he.actions.edit}
             </Button>
           </PermissionGate>
           <PermissionGate entity="beehiveBuyerTracking" action="write">
             <Button variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => navigate(`/beehiveBuyerTrackings/new?cloneFrom=${entity.id}`)}>
-              Clone
+              {he.actions.duplicate}
             </Button>
           </PermissionGate>
           <Button variant="outlined" onClick={() => navigate('/beehiveBuyerTrackings')}>
-            Back to List
+            {he.actions.backToList}
           </Button>
           <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => window.print()} className="no-print">
-            Print
+            {he.actions.print}
           </Button>
         </Box>
       </Box>
@@ -116,9 +118,9 @@ export default function BeehiveBuyerTrackingView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                ID
+                {fieldLabel('id') ?? 'ID'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy ID" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.id, 'ID')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -133,7 +135,7 @@ export default function BeehiveBuyerTrackingView() {
               <Typography variant="caption" color="text.secondary" title="Customer">
                 Customer ID
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Customer ID" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.fkCustomerId, 'Customer ID')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -148,9 +150,9 @@ export default function BeehiveBuyerTrackingView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Last Order Date
+                {fieldLabel('lastOrderDate') ?? 'Last Order Date'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Last Order Date" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.lastOrderDate, 'Last Order Date')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -163,9 +165,9 @@ export default function BeehiveBuyerTrackingView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Beehive Quantity
+                {fieldLabel('beehiveQuantity') ?? 'Beehive Quantity'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Beehive Quantity" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.beehiveQuantity, 'Beehive Quantity')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -178,9 +180,9 @@ export default function BeehiveBuyerTrackingView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Reminder Month
+                {fieldLabel('reminderMonth') ?? 'Reminder Month'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Reminder Month" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.reminderMonth, 'Reminder Month')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -193,9 +195,9 @@ export default function BeehiveBuyerTrackingView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Is Relevant
+                {fieldLabel('isRelevant') ?? 'Is Relevant'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Is Relevant" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.isRelevant, 'Is Relevant')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -203,7 +205,7 @@ export default function BeehiveBuyerTrackingView() {
             </Box>
             <Box>
               <Chip
-                label={entity.isRelevant ? 'Yes' : 'No'}
+                label={entity.isRelevant ? he.messages.yes : he.messages.no}
                 color={entity.isRelevant ? 'success' : 'default'}
                 size="small"
               />
@@ -212,9 +214,9 @@ export default function BeehiveBuyerTrackingView() {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Typography variant="caption" color="text.secondary">
-                Notes
+                {fieldLabel('notes') ?? 'Notes'}
               </Typography>
-              <Tooltip title="Copy" className="no-print">
+              <Tooltip title={he.actions.copy} className="no-print">
                 <IconButton size="small" aria-label="Copy Notes" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.notes, 'Notes')}>
                   <ContentCopyIcon sx={{ fontSize: 14 }} />
                 </IconButton>
@@ -229,8 +231,8 @@ export default function BeehiveBuyerTrackingView() {
 
       <Box sx={{ mt: 3 }}>
         <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tab label="Details" />
-          <Tab label="History" />
+          <Tab label={he.actions.details} />
+          <Tab label={he.grid.history} />
         </Tabs>
 
         {/* History tab — fetches from c_AuditIndexed */}

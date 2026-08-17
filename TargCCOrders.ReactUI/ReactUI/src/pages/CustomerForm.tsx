@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useCustomer, useCreateCustomer, useUpdateCustomer } from '../hooks/useCustomer';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { customerSchema, type CustomerFormData } from '../types/Customer';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -232,7 +234,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Customer' : cloneFromId ? 'Clone Customer' : 'Add Customer'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.customer.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.customer.s}` : `${he.grid.addOf} ${he.entities.customer.s}`}
         </Typography>
       )}
       {cloneFromId && (
@@ -251,7 +253,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Customer Code"
+                  label={fieldLabel('customerCode') ?? "Customer Code"}
                   type="text"
                   fullWidth
                   autoFocus
@@ -268,7 +270,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Customer Name"
+                  label={fieldLabel('customerName') ?? "Customer Name"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -286,7 +288,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Phone"
+                  label={fieldLabel('phone') ?? "Phone"}
                   type="text"
                   fullWidth
                   error={Boolean(errors.phone)}
@@ -301,7 +303,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Email"
+                  label={fieldLabel('email') ?? "Email"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -318,7 +320,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Address"
+                  label={fieldLabel('address') ?? "Address"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -335,7 +337,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="City"
+                  label={fieldLabel('city') ?? "City"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -352,7 +354,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Tax ID"
+                  label={fieldLabel('taxId') ?? "Tax ID"}
                   type="text"
                   fullWidth
                   error={Boolean(errors.taxId)}
@@ -367,7 +369,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Customer Type"
+                  label={fieldLabel('enmCustomerType') ?? "Customer Type"}
                   select
                   fullWidth
                   error={Boolean(errors.enmCustomerType)}
@@ -388,7 +390,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Payment Terms Days"
+                  label={fieldLabel('paymentTermsDays') ?? "Payment Terms Days"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.paymentTermsDays)}
@@ -403,7 +405,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -420,7 +422,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Location"
+                  label={fieldLabel('location') ?? "Location"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -437,7 +439,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Accountant Email"
+                  label={fieldLabel('accountantEmail') ?? "Accountant Email"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -454,7 +456,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Accountant Method"
+                  label={fieldLabel('enmAccountantMethod') ?? "Accountant Method"}
                   select
                   fullWidth
                   error={Boolean(errors.enmAccountantMethod)}
@@ -475,7 +477,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Invoice Name"
+                  label={fieldLabel('invoiceName') ?? "Invoice Name"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -492,7 +494,7 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Profitability Code"
+                  label={fieldLabel('profitabilityCode') ?? "Profitability Code"}
                   type="text"
                   fullWidth
                   error={Boolean(errors.profitabilityCode)}
@@ -504,16 +506,16 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
               <>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" color="text.secondary">
-                  Computed Fields
+                  {he.grid.computedFields}
                 </Typography>
                 <TextField
-                  label="Is Active"
+                  label={fieldLabel('profitabilityCode') ?? "Is Active"}
                   value={existingData.isActive ? 'Yes' : 'No'}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Customer Identifier"
+                  label={fieldLabel('profitabilityCode') ?? "Customer Identifier"}
                   value={existingData.customerIdentifier ?? ''}
                   disabled
                   fullWidth
@@ -522,11 +524,11 @@ export default function CustomerForm({ embedded, onSuccess }: CustomerFormProps 
             )}
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/customers')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useOrderLine, useCreateOrderLine, useUpdateOrderLine } from '../hooks/useOrderLine';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { orderLineSchema, type OrderLineFormData } from '../types/OrderLine';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useQuery } from '@tanstack/react-query';
@@ -224,7 +226,7 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Order Line' : cloneFromId ? 'Clone Order Line' : 'Add Order Line'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.orderLine.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.orderLine.s}` : `${he.grid.addOf} ${he.entities.orderLine.s}`}
         </Typography>
       )}
       <Paper sx={{ p: 3, elevation: embedded ? 0 : undefined }}>
@@ -244,7 +246,7 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Order Header ID"
+                      label={fieldLabel('fkOrderHeaderId') ?? "Order Header ID"}
                       title="Order Header"
                       autoFocus
                       required
@@ -269,7 +271,7 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Product ID"
+                      label={fieldLabel('fkProductId') ?? "Product ID"}
                       title="Product"
                       required
                       error={Boolean(errors.fkProductId)}
@@ -286,7 +288,7 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Quantity"
+                  label={fieldLabel('quantity') ?? "Quantity"}
                   type="number"
                   fullWidth
                   required
@@ -302,7 +304,7 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Unit Price"
+                  label={fieldLabel('unitPrice') ?? "Unit Price"}
                   type="number"
                   fullWidth
                   required
@@ -318,7 +320,7 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Discount Percent"
+                  label={fieldLabel('discountPercent') ?? "Discount Percent"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.discountPercent)}
@@ -333,7 +335,7 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Line Number"
+                  label={fieldLabel('lineNumber') ?? "Line Number"}
                   type="number"
                   fullWidth
                   required
@@ -346,28 +348,28 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
               <>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" color="text.secondary">
-                  Computed Fields
+                  {he.grid.computedFields}
                 </Typography>
                 <TextField
-                  label="Unit Cost"
+                  label={fieldLabel('lineNumber') ?? "Unit Cost"}
                   value={existingData.unitCost ?? ''}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Line Total"
+                  label={fieldLabel('lineNumber') ?? "Line Total"}
                   value={existingData.lineTotal ?? ''}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Total Cost"
+                  label={fieldLabel('lineNumber') ?? "Total Cost"}
                   value={existingData.totalCost ?? ''}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Profit"
+                  label={fieldLabel('lineNumber') ?? "Profit"}
                   value={existingData.profit ?? ''}
                   disabled
                   fullWidth
@@ -376,11 +378,11 @@ export default function OrderLineForm({ embedded, onSuccess }: OrderLineFormProp
             )}
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/orderLines')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

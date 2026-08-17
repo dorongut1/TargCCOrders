@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useDelivery, useCreateDelivery, useUpdateDelivery } from '../hooks/useDelivery';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { deliverySchema, type DeliveryFormData } from '../types/Delivery';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -234,7 +236,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Delivery' : cloneFromId ? 'Clone Delivery' : 'Add Delivery'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.delivery.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.delivery.s}` : `${he.grid.addOf} ${he.entities.delivery.s}`}
         </Typography>
       )}
       <Paper sx={{ p: 3, elevation: embedded ? 0 : undefined }}>
@@ -254,7 +256,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Order Header ID"
+                      label={fieldLabel('fkOrderHeaderId') ?? "Order Header ID"}
                       title="Order Header"
                       autoFocus
                       required
@@ -272,7 +274,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Delivery Address"
+                  label={fieldLabel('deliveryAddress') ?? "Delivery Address"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -289,7 +291,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Contact Phone"
+                  label={fieldLabel('contactPhone') ?? "Contact Phone"}
                   type="text"
                   fullWidth
                   error={Boolean(errors.contactPhone)}
@@ -304,7 +306,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Contact Name"
+                  label={fieldLabel('contactName') ?? "Contact Name"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -321,7 +323,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Delivery Method"
+                  label={fieldLabel('enmDeliveryMethod') ?? "Delivery Method"}
                   select
                   fullWidth
                   error={Boolean(errors.enmDeliveryMethod)}
@@ -343,7 +345,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Ordered Date"
+                  label={fieldLabel('orderedDate') ?? "Ordered Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -360,7 +362,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Received Date"
+                  label={fieldLabel('receivedDate') ?? "Received Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -377,7 +379,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Arrival To Hub Date"
+                  label={fieldLabel('arrivalToHubDate') ?? "Arrival To Hub Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -394,7 +396,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
                 <TextField
                   {...field}
                   value={(() => { const v = String(field.value ?? ''); return (!v || v < '1900') ? '' : v.substring(0, 10); })()}
-                  label="Arrival To Customer Date"
+                  label={fieldLabel('arrivalToCustomerDate') ?? "Arrival To Customer Date"}
                   type="date"
                   slotProps={{ inputLabel: { shrink: true } }}
                   fullWidth
@@ -410,7 +412,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Delivery Status"
+                  label={fieldLabel('enmDeliveryStatus') ?? "Delivery Status"}
                   select
                   fullWidth
                   required
@@ -432,7 +434,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Location"
+                  label={fieldLabel('location') ?? "Location"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -449,7 +451,7 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -463,10 +465,10 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
               <>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" color="text.secondary">
-                  Computed Fields
+                  {he.grid.computedFields}
                 </Typography>
                 <TextField
-                  label="Products Summary"
+                  label={fieldLabel('notes') ?? "Products Summary"}
                   value={existingData.productsSummary ?? ''}
                   disabled
                   fullWidth
@@ -475,11 +477,11 @@ export default function DeliveryForm({ embedded, onSuccess }: DeliveryFormProps 
             )}
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/deliveries')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>

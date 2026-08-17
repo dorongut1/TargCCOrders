@@ -29,6 +29,8 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useProduct, useCreateProduct, useUpdateProduct } from '../hooks/useProduct';
+import { fieldLabel } from '../i18n/fieldLabels';
+import he from '../i18n/he';
 import { productSchema, type ProductFormData } from '../types/Product';
 import { PermissionGate } from '../contexts/AuthContext';
 import { useEnumValues } from '../hooks/useEnumValues';
@@ -213,7 +215,7 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
       </Dialog>
       {!embedded && (
         <Typography variant="h5" mb={3}>
-          {isEditMode ? 'Edit Product' : cloneFromId ? 'Clone Product' : 'Add Product'}
+          {isEditMode ? `${he.grid.editOf} ${he.entities.product.s}` : cloneFromId ? `${he.grid.cloneOf} ${he.entities.product.s}` : `${he.grid.addOf} ${he.entities.product.s}`}
         </Typography>
       )}
       {cloneFromId && (
@@ -232,7 +234,7 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Product Code"
+                  label={fieldLabel('productCode') ?? "Product Code"}
                   type="text"
                   fullWidth
                   autoFocus
@@ -249,7 +251,7 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Product Name"
+                  label={fieldLabel('productName') ?? "Product Name"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -267,7 +269,7 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Category"
+                  label={fieldLabel('enmCategory') ?? "Category"}
                   select
                   fullWidth
                   error={Boolean(errors.enmCategory)}
@@ -288,7 +290,7 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Unit Of Measure"
+                  label={fieldLabel('unitOfMeasure') ?? "Unit Of Measure"}
                   type="text"
                   fullWidth
                   error={Boolean(errors.unitOfMeasure)}
@@ -303,7 +305,7 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Notes"
+                  label={fieldLabel('notes') ?? "Notes"}
                   type="textarea"
                   multiline
                   rows={4}
@@ -320,7 +322,7 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Base Cost"
+                  label={fieldLabel('baseCost') ?? "Base Cost"}
                   type="number"
                   fullWidth
                   error={Boolean(errors.baseCost)}
@@ -332,16 +334,16 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
               <>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" color="text.secondary">
-                  Computed Fields
+                  {he.grid.computedFields}
                 </Typography>
                 <TextField
-                  label="Is Active"
+                  label={fieldLabel('baseCost') ?? "Is Active"}
                   value={existingData.isActive ? 'Yes' : 'No'}
                   disabled
                   fullWidth
                 />
                 <TextField
-                  label="Current Stock"
+                  label={fieldLabel('baseCost') ?? "Current Stock"}
                   value={existingData.currentStock ?? ''}
                   disabled
                   fullWidth
@@ -350,11 +352,11 @@ export default function ProductForm({ embedded, onSuccess }: ProductFormProps = 
             )}
             <Box display="flex" gap={2} mt={2}>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create')}
+                {isSubmitting ? he.actions.saving : (isEditMode ? he.actions.save : he.actions.create)}
               </Button>
               {!embedded && (
                 <Button variant="outlined" onClick={() => navigate('/products')}>
-                  Cancel
+                  {he.actions.cancel}
                 </Button>
               )}
             </Box>
