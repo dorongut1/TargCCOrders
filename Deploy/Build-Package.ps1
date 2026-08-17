@@ -5,9 +5,12 @@
 # those hold the production connection string and log location, and the ones
 # produced by a build hold neither -- overwriting them takes the site down.
 #
+# The finished archive is copied to the shared folder it gets collected from.
+#
 # Usage:   .\Build-Package.ps1
 #          .\Build-Package.ps1 -SkipReact        (host only)
 #          .\Build-Package.ps1 -NoZip            (leave the folder, no archive)
+#          .\Build-Package.ps1 -NoShareCopy      (keep the archive local)
 
 [CmdletBinding()]
 param(
@@ -15,8 +18,10 @@ param(
     [string] $StageRoot     = 'C:\Dev\Publish\TargCCOrders',
     [string] $ZipRoot       = 'C:\Dev\Publish',
     [string] $MSBuild       = 'C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe',
+    [string] $SharePath     = '\\mercury\Public\DoronG',
     [switch] $SkipReact,
-    [switch] $NoZip
+    [switch] $NoZip,
+    [switch] $NoShareCopy
 )
 
 $ErrorActionPreference = 'Stop'
@@ -127,6 +132,27 @@ if (-not $NoZip) {
     $sizeMb = [math]::Round((Get-Item $zipPath).Length / 1MB, 1)
     Write-Host ''
     Write-Host "Package ready: $zipPath ($sizeMb MB)" -ForegroundColor Green
+
+    if (-not $NoShareCopy) {
+        Step "Copying to $SharePath"
+        # A failure here is treated as fatal on purpose. The share is where the
+        # package is collected from, and an older build sitting there is
+        # indistinguishable from a fresh one -- deploying it would look like the
+        # changes silently did not take.
+        if (-not (Test-Path $SharePath)) {
+            Fail "Share $SharePath is not reachable. The local package is fine, but nothing was copied -- do not deploy whatever is already on the share, it is from an earlier build."
+        }
+        try {
+            Copy-Item $zipPath $SharePath -Force -ErrorAction Stop
+        }
+        catch {
+            Fail "Copy to $SharePath failed: $($_.Exception.Message). Do not deploy whatever is already on the share, it is from an earlier build."
+        }
+
+        $shareFile = Join-Path $SharePath (Split-Path $zipPath -Leaf)
+        if (-not (Test-Path $shareFile)) { Fail "Copy reported success but $shareFile is not there." }
+        Write-Host "    $shareFile" -ForegroundColor Green
+    }
 }
 else {
     Write-Host ''
