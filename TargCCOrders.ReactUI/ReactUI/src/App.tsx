@@ -38,6 +38,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import FolderIcon from '@mui/icons-material/Folder';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -587,6 +588,7 @@ function PageFallback() {
 export default function App() {
   const { isDarkMode, toggleTheme } = useThemeMode();
   const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
@@ -673,7 +675,15 @@ export default function App() {
           <IconButton color="inherit" onClick={toggleTheme} title={isDarkMode ? 'Light mode' : 'Dark mode'}>
             {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
-          <IconButton color="inherit" onClick={logout} title="Logout">
+          {/* Every account starts on the shared initial password, so this has
+              to be reachable by anyone who can log in -- not gated on a role,
+              and not only by knowing the URL. */}
+          <Tooltip title="שינוי סיסמה">
+            <IconButton color="inherit" onClick={() => navigate('/change-password')}>
+              <VpnKeyIcon />
+            </IconButton>
+          </Tooltip>
+          <IconButton color="inherit" onClick={logout} title="יציאה">
             <LogoutIcon />
           </IconButton>
         </Toolbar>
