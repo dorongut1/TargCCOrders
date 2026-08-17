@@ -7,7 +7,7 @@ import { z } from 'zod';
 import {
   Box, Paper, Typography, Button, TextField, MenuItem, Autocomplete,
   Divider, IconButton, Tooltip, Alert, Dialog, DialogTitle,
-  DialogContent, DialogActions, Chip, Skeleton,
+  DialogContent, DialogActions, Chip, Skeleton, Stack,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
@@ -31,6 +31,7 @@ import useTranslation from '../i18n/useTranslation';
 import type { OrderHeader } from '../types/OrderHeader';
 import type { OrderLine } from '../types/OrderLine';
 import type { Product } from '../types/Product';
+import type { Customer } from '../types/Customer';
 
 // ── Schema ──
 const orderSchema = z.object({
@@ -140,6 +141,27 @@ export default function OrderCompositeForm() {
   });
 
   const selectedCustomerId = watch('fkCustomerId');
+
+  // The customer's class decides which price every line gets, so it must be
+  // visible once a customer is chosen — otherwise the user has no way to tell
+  // whether a farmer or a retail price is about to be applied.
+  const selectedCustomer = useMemo(
+    () => customerData?.items?.find((c: Customer) => c.id === selectedCustomerId),
+    [customerData, selectedCustomerId]
+  );
+  const customerTypeOptions = useEnumValues('CustomerType');
+  const selectedCustomerTypeLabel = useMemo(() => {
+    if (!selectedCustomer) return '';
+    const raw = (selectedCustomer as any).enmCustomerType;
+    if (raw == null || raw === '') return '';
+    // The API may hand back either the numeric enum value or its English name.
+    const byValue = customerTypeOptions.find(o => o.value === Number(raw));
+    if (byValue) return byValue.label;
+    const byName = customerTypeOptions.find(
+      o => o.name?.toLowerCase() === String(raw).toLowerCase()
+    );
+    return byName ? byName.label : String(raw);
+  }, [selectedCustomer, customerTypeOptions]);
 
   // Enum defaults for a NEW order, resolved by name so they survive
   // regeneration. Until the enum list loads these are undefined and the effect
@@ -283,10 +305,18 @@ export default function OrderCompositeForm() {
           if (result.discountPercent != null) {
             updateLine(lineId, 'discountPercent', result.discountPercent);
           }
+        } else {
+          // No price row for this (product, customer type). Silently leaving 0
+          // looks like the auto-pricing is broken, when in fact the price list
+          // simply has no entry — say so and let the user type one.
+          showWarning(
+            `למוצר "${product?.productName ?? ''}" אין מחיר מוגדר לסוג הלקוח `
+            + `${selectedCustomerTypeLabel || ''} — יש להזין מחיר ידנית.`
+          );
         }
       } catch { /* fallback: no auto-price */ }
     }
-  }, [productData, selectedCustomerId, updateLine]);
+  }, [productData, selectedCustomerId, selectedCustomerTypeLabel, showWarning, updateLine]);
 
   // ── Totals ──
   const totals = useMemo(() => {
@@ -556,6 +586,24 @@ export default function OrderCompositeForm() {
                   )}
                 />
               )} />
+              {/* The class is what selects the price for every line, so it is
+                  surfaced right under the picker rather than left implicit. */}
+              {selectedCustomer && (
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
+                  <Chip
+                    size="small"
+                    color={selectedCustomerTypeLabel ? 'primary' : 'warning'}
+                    label={selectedCustomerTypeLabel
+                      ? `סיווג: ${selectedCustomerTypeLabel}`
+                      : 'סיווג לקוח לא מוגדר'}
+                  />
+                  {!selectedCustomerTypeLabel && (
+                    <Typography variant="caption" color="text.secondary">
+                      לא יימשך מחיר אוטומטי
+                    </Typography>
+                  )}
+                </Stack>
+              )}
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Controller name="orderDate" control={control} render={({ field }) => (
