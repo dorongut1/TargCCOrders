@@ -291,6 +291,13 @@ const he = {
 
   // ─── Table / Grid ───
   grid: {
+    actions: 'פעולות',
+    rows: 'שורות',
+    autoSize: 'התאם רוחב',
+    adjustFilters: 'נסה לשנות את החיפוש או הסינון',
+    field: 'שדה',
+    value: 'ערך',
+    apply: 'החל',
     rowsPerPage: 'שורות בעמוד',
     of: 'מתוך',
     noRows: 'אין שורות להצגה',

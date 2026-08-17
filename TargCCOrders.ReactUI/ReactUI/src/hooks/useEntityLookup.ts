@@ -35,12 +35,18 @@ const SOURCES: Record<LookupEntity, Source> = {
   orderHeader: { key: ['orderHeaders', 'all'], fn: () => OrderHeaderApi.getAll(0, 9999, '') },
 };
 
-export function useEntityLookup(entity: LookupEntity): (id: number) => string {
+/**
+ * @param enabled pass false to skip the fetch. Callers that decide at render
+ *   time whether they need a lookup cannot call the hook conditionally, so the
+ *   condition has to live here instead.
+ */
+export function useEntityLookup(entity: LookupEntity, enabled = true): (id: number) => string {
   const source = SOURCES[entity];
   const { data } = useQuery({
     queryKey: source.key,
     queryFn: source.fn,
     staleTime: 5 * 60_000,
+    enabled,
   });
   return useMemo(
     () => buildLookup(entity, data?.items as Record<string, unknown>[] | undefined),

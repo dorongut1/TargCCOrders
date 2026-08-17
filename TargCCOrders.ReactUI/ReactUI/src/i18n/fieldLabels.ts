@@ -10,6 +10,8 @@ import he from './he';
  * grid shows the referenced record's name rather than its id.
  */
 const extra: Record<string, string> = {
+  // Not a data field, but every generated grid ends with it.
+  actions: he.grid.actions,
   fkCustomerId: he.fields.customerName,
   fkProductId: he.fields.productName,
   fkOrderHeaderId: he.fields.orderNumber,

@@ -17,11 +17,13 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { OrderHeaderApi } from '../api/OrderHeaderApi';
 import { useEnumValues, useEnumLabel } from '../hooks/useEnumValues';
 import useTranslation from '../i18n/useTranslation';
+import { useEntityLookup } from '../hooks/useEntityLookup';
 import type { OrderHeader } from '../types/OrderHeader';
 
 export default function OrderCompositeList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const customerName = useEntityLookup('customer');
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 25 });
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'orderDate', sort: 'desc' }]);
   const [search, setSearch] = useState('');
@@ -84,9 +86,12 @@ export default function OrderCompositeList() {
       headerName: t.fields.customerName,
       flex: 1,
       minWidth: 180,
+      // The server declares customerDisplayName but never fills it, so every
+      // row fell through to "לקוח #5". Resolve it from the customer list
+      // instead; the server value still wins if it ever starts arriving.
       renderCell: (params) => (
         <Typography variant="body2">
-          {params.row.customerDisplayName || `לקוח #${params.value}`}
+          {params.row.customerDisplayName || customerName(params.value as number)}
         </Typography>
       ),
     },

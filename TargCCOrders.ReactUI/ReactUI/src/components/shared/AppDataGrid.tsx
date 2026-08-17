@@ -32,7 +32,10 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { localizeColumns } from '../../i18n/localizeColumns';
+import { localizeColumns, hasHebrew } from '../../i18n/localizeColumns';
+import { resolveForeignKeys, neededLookups } from '../../i18n/resolveForeignKeys';
+import { useEntityLookup } from '../../hooks/useEntityLookup';
+import type { LookupEntity } from '../../hooks/entityLookupCore';
 import he from '../../i18n/he';
 
 interface AppDataGridProps {
@@ -108,11 +111,11 @@ function NoRowsOverlay({ onCreateClick }: { onCreateClick?: () => void }) {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100%" gap={1} p={4}>
       <InboxIcon sx={{ fontSize: 64, color: 'text.disabled' }} />
-      <Typography variant="h6" color="text.secondary">No records found</Typography>
-      <Typography variant="body2" color="text.secondary">Try adjusting your search or filters</Typography>
+      <Typography variant="h6" color="text.secondary">{he.messages.noData}</Typography>
+      <Typography variant="body2" color="text.secondary">{he.grid.adjustFilters}</Typography>
       {onCreateClick && (
         <Button variant="contained" size="small" onClick={onCreateClick} sx={{ mt: 1 }}>
-          Create New
+          {he.actions.create}
         </Button>
       )}
     </Box>
@@ -147,11 +150,11 @@ function BulkEditDialog({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Bulk Edit</DialogTitle>
+      <DialogTitle>{he.actions.bulkEdit}</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
         <FormControl fullWidth size="small" sx={{ mt: 1 }}>
-          <InputLabel>Field</InputLabel>
-          <Select value={selectedField} label="Field" onChange={(e) => { setSelectedField(e.target.value); setFieldValue(''); }}>
+          <InputLabel>{he.grid.field}</InputLabel>
+          <Select value={selectedField} label={he.grid.field} onChange={(e) => { setSelectedField(e.target.value); setFieldValue(''); }}>
             {fields.map((f) => (
               <MenuItem key={f.field} value={f.field}>{f.label}</MenuItem>
             ))}
@@ -159,7 +162,7 @@ function BulkEditDialog({
         </FormControl>
         {selectedField && (
           <TextField
-            label="Value"
+            label={he.grid.value}
             type={inputType}
             value={fieldValue}
             onChange={(e) => setFieldValue(e.target.value)}
@@ -170,8 +173,8 @@ function BulkEditDialog({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button variant="contained" onClick={handleApply} disabled={!selectedField}>Apply</Button>
+        <Button onClick={onClose}>{he.actions.cancel}</Button>
+        <Button variant="contained" onClick={handleApply} disabled={!selectedField}>{he.grid.apply}</Button>
       </DialogActions>
     </Dialog>
   );
@@ -184,10 +187,10 @@ function CustomToolbar({ onClearFilters, onAutoSize }: { onClearFilters: () => v
       <GridToolbarFilterButton />
       <GridToolbarDensitySelector />
       <Button size="small" startIcon={<FitScreenIcon />} onClick={onAutoSize}>
-        Auto-size
+        {he.grid.autoSize}
       </Button>
       <Button size="small" startIcon={<ClearIcon />} onClick={onClearFilters}>
-        Clear Filters
+        {he.actions.clearFilter}
       </Button>
     </GridToolbarContainer>
   );
@@ -229,11 +232,29 @@ export default function AppDataGrid({
   // Shadowing the raw props on purpose. Every consumer below — the grid, the
   // CSV export, the Excel export, the heading — then reads the localized
   // version without a separate edit at each site, so no site can be missed.
-  const columns = useMemo(() => localizeColumns(rawColumns), [rawColumns]);
+  // Only fetch the lookups this screen's columns actually reference.
+  const needed = useMemo(() => neededLookups(rawColumns), [rawColumns]);
+  const customerName = useEntityLookup('customer', needed.has('customer'));
+  const productName = useEntityLookup('product', needed.has('product'));
+  const orderName = useEntityLookup('orderHeader', needed.has('orderHeader'));
+  const lookup = useCallback(
+    (entity: LookupEntity) =>
+      entity === 'customer' ? customerName : entity === 'product' ? productName : orderName,
+    [customerName, productName, orderName]
+  );
+
+  const columns = useMemo(
+    () => resolveForeignKeys(localizeColumns(rawColumns), lookup),
+    [rawColumns, lookup]
+  );
+  // Same rule as the columns: a Hebrew title the caller chose wins, an English
+  // one generated as "Customer List" gives way to the entity's plural name.
   const title = useMemo(() => {
-    if (rawTitle) return rawTitle;
-    if (!entityName) return undefined;
-    return he.entities[entityName as keyof typeof he.entities]?.p;
+    if (hasHebrew(rawTitle)) return rawTitle;
+    const fromEntity = entityName
+      ? he.entities[entityName as keyof typeof he.entities]?.p
+      : undefined;
+    return fromEntity ?? rawTitle;
   }, [rawTitle, entityName]);
 
   // Load saved state from localStorage
@@ -401,7 +422,7 @@ export default function AppDataGrid({
       {/* Header bar - stays outside horizontal scroll */}
       <Box display="flex" flexWrap="wrap" alignItems="center" gap={1} mb={2}>
         {title && <Typography variant="h5" sx={{ mr: 1 }}>{title}</Typography>}
-        <Chip label={`${isServerMode ? rowCount : filteredRows.length} rows`} size="small" variant="outlined" />
+        <Chip label={`${isServerMode ? rowCount : filteredRows.length} ${he.grid.rows}`} size="small" variant="outlined" />
         {showSearch && (
           <TextField
             size="small"
@@ -422,7 +443,7 @@ export default function AppDataGrid({
         )}
         {showExport && (
           <>
-            <Tooltip title="Export">
+            <Tooltip title={he.actions.export}>
               <IconButton onClick={(e) => setExportMenuAnchor(e.currentTarget)} size="small">
                 <FileDownloadIcon />
               </IconButton>
