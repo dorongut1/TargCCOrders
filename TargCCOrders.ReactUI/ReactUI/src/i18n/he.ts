@@ -115,6 +115,27 @@ const he = {
     lastOrderDate: 'תאריך הזמנה אחרון',
     beehiveQuantity: 'כמות כוורות',
     reminderMonth: 'חודש תזכורת',
+    isRelevant: 'רלוונטי',
+    // Price list
+    baseCost: 'עלות בסיס',
+    sellingPrice: 'מחיר מכירה',
+    minQuantity: 'כמות מינימלית',
+    validFrom: 'בתוקף מ־',
+    validTo: 'בתוקף עד',
+    archivedDate: 'תאריך ארכוב',
+    archivedReason: 'סיבת ארכוב',
+    originalPriceId: 'מחיר מקורי',
+    // Product
+    currentStock: 'מלאי נוכחי',
+    unitOfMeasure: 'יחידת מידה',
+    // Customer
+    customerIdentifier: 'מזהה לקוח',
+    // Supplier order
+    sentDate: 'תאריך שליחה',
+    requestedDeliveryDate: 'תאריך אספקה מבוקש',
+    requestedDeliveryDay: 'יום אספקה מבוקש',
+    // Payment
+    paymentDate: 'תאריך תשלום',
   },
 
   // ─── Enum Labels ───
@@ -152,6 +173,9 @@ const he = {
     search: 'חיפוש',
     filter: 'סינון',
     clearFilter: 'נקה סינון',
+    hideFilters: 'הסתר סינון',
+    copyId: 'העתק מזהה',
+    copyRow: 'העתק שורה',
     selectAll: 'בחר הכל',
     deselectAll: 'בטל בחירה',
     bulkEdit: 'עריכה מרובה',
