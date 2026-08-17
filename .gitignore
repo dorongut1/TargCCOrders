@@ -43,6 +43,16 @@ Database/_whoLocks.ps1
 _commitmsg.txt
 _reactbuild.log
 
+# ── מידע אישי של לקוחות — לעולם לא לגיט ──────────────
+# הקבצים האלה מכילים 1,433 לקוחות אמיתיים: שמות, טלפונים,
+# אימיילים, כתובות וח.פ. פעם שנכנס להיסטוריית git — כמעט
+# בלתי אפשרי להסיר. ניתן לייצר אותם מחדש מקובץ האקסל.
+Database/import/
+Database/IMPORT_2_migrate_*.sql
+Database/_tmp_proc.sql
+_qa.txt
+_survey2.txt
+
 # ── קבצי עזר גדולים (האקסל המקורי — גיבוי, לא קוד) ──
 *.xlsx
 
