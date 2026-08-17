@@ -209,6 +209,8 @@ const he = {
     discard: 'מחק',
     noData: 'אין נתונים להצגה',
     loading: 'טוען נתונים...',
+    idCopied: 'המזהה הועתק',
+    rowCopied: 'השורה הועתקה',
     emailSent: 'המייל נשלח בהצלחה',
     emailFailed: 'שליחת המייל נכשלה',
     unsavedChanges: 'יש שינויים שלא נשמרו. לצאת בכל זאת?',

@@ -78,7 +78,6 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
         archivedReason: existingData.archivedReason ?? '',
         originalPriceId: existingData.originalPriceId ?? 0,
         notes: existingData.notes ?? '',
-        addFieldsHere: existingData.addFieldsHere ?? '',
       });
     }
   }, [isEditMode, existingData, reset]);
@@ -98,7 +97,6 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
         archivedReason: cloneSourceData.archivedReason ?? '',
         originalPriceId: cloneSourceData.originalPriceId ?? 0,
         notes: cloneSourceData.notes ?? '',
-        addFieldsHere: cloneSourceData.addFieldsHere ?? '',
       });
     }
   }, [cloneFromId, cloneSourceData, isEditMode, reset]);
@@ -432,21 +430,6 @@ export default function ProductPriceHistForm({ embedded, onSuccess }: ProductPri
                   fullWidth
                   error={Boolean(errors.notes)}
                   helperText={errors.notes?.message}
-                />
-              )}
-            />
-            <Controller
-              name="addFieldsHere"
-              control={control}
-              defaultValue={''}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Add Fields Here"
-                  type="text"
-                  fullWidth
-                  error={Boolean(errors.addFieldsHere)}
-                  helperText={errors.addFieldsHere?.message}
                 />
               )}
             />

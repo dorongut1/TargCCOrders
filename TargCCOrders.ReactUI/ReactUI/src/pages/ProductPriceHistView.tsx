@@ -330,21 +330,6 @@ export default function ProductPriceHistView() {
               {entity.notes ?? '-'}
             </Typography>
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Box display="flex" alignItems="center" gap={0.5}>
-              <Typography variant="caption" color="text.secondary">
-                Add Fields Here
-              </Typography>
-              <Tooltip title="Copy" className="no-print">
-                <IconButton size="small" aria-label="Copy Add Fields Here" sx={{ p: 0, opacity: 0.4, '&:hover': { opacity: 1 } }} onClick={() => copyToClipboard(entity.addFieldsHere, 'Add Fields Here')}>
-                  <ContentCopyIcon sx={{ fontSize: 14 }} />
-                </IconButton>
-              </Tooltip>
-            </Box>
-            <Typography variant="body1">
-              {entity.addFieldsHere ?? '-'}
-            </Typography>
-          </Grid>
         </Grid>
       </Paper>
 

@@ -20,6 +20,7 @@ import DeliveryForm from './DeliveryForm';
 import type { UpdateDeliveryRequest } from '../types/Delivery';
 import FilterBuilder from '../components/shared/FilterBuilder';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import he from '../i18n/he';
 import { Collapse } from '@mui/material';
 
 export default function DeliveryList() {
@@ -164,7 +165,7 @@ export default function DeliveryList() {
     <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="flex-end" mb={1}>
         <Button size="small" startIcon={<FilterListIcon />} onClick={() => setShowFilters((p) => !p)} color={Object.keys(activeFilters).length > 0 ? 'primary' : 'inherit'}>
-          {showFilters ? 'Hide Filters' : `Filters${Object.keys(activeFilters).length > 0 ? ` (${Object.keys(activeFilters).length})` : ''}`}
+          {showFilters ? he.actions.hideFilters : `${he.actions.filter}${Object.keys(activeFilters).length > 0 ? ` (${Object.keys(activeFilters).length})` : ''}`}
         </Button>
       </Box>
       <Collapse in={showFilters}>
@@ -188,12 +189,12 @@ export default function DeliveryList() {
         checkboxSelection
         onSelectionChange={(ids) => setSelectedIds(ids)}
         onContextMenuActions={(id, row) => [
-          { label: 'Open', icon: <OpenInNewIcon fontSize="small" />, onClick: () => navigate(`/deliveries/${id}`) },
-          { label: 'Copy ID', icon: <ContentCopyIcon fontSize="small" />, onClick: () => { navigator.clipboard.writeText(String(id)); showSuccess('ID copied'); } },
-          { label: 'Copy Row', icon: <ContentCopyIcon fontSize="small" />, onClick: () => { navigator.clipboard.writeText(JSON.stringify(row, null, 2)); showSuccess('Row copied'); } },
-          { label: 'Duplicate', icon: <ContentCopyIcon fontSize="small" />, onClick: () => navigate(`/deliveries/new?cloneFrom=${id}`), divider: true },
-          { label: 'Edit', icon: <EditIcon fontSize="small" />, onClick: () => navigate(`/deliveries/${id}/edit`) },
-          { label: 'Delete', icon: <DeleteIcon fontSize="small" />, onClick: () => setDeleteId(id as number), divider: true },
+          { label: he.actions.view, icon: <OpenInNewIcon fontSize="small" />, onClick: () => navigate(`/deliveries/${id}`) },
+          { label: he.actions.copyId, icon: <ContentCopyIcon fontSize="small" />, onClick: () => { navigator.clipboard.writeText(String(id)); showSuccess(he.messages.idCopied); } },
+          { label: he.actions.copyRow, icon: <ContentCopyIcon fontSize="small" />, onClick: () => { navigator.clipboard.writeText(JSON.stringify(row, null, 2)); showSuccess(he.messages.rowCopied); } },
+          { label: he.actions.duplicate, icon: <ContentCopyIcon fontSize="small" />, onClick: () => navigate(`/deliveries/new?cloneFrom=${id}`), divider: true },
+          { label: he.actions.edit, icon: <EditIcon fontSize="small" />, onClick: () => navigate(`/deliveries/${id}/edit`) },
+          { label: he.actions.delete, icon: <DeleteIcon fontSize="small" />, onClick: () => setDeleteId(id as number), divider: true },
         ]}
         onCreateNew={() => navigate('/deliveries/new')}
         editable
@@ -220,16 +221,16 @@ export default function DeliveryList() {
             <PermissionGate entity="delivery" action="delete">
               {selectedIds.length > 0 && (
                 <Button variant="outlined" color="error" onClick={() => setBulkDeleteConfirm(true)}>
-                  Delete Selected ({selectedIds.length})
+                  {he.actions.bulkDelete} ({selectedIds.length})
                 </Button>
               )}
             </PermissionGate>
             <PermissionGate entity="delivery" action="write">
               <Button variant="contained" onClick={() => navigate('/deliveries/new')}>
-                Add New
+                {he.actions.create}
               </Button>
               <Button variant="outlined" onClick={() => setQuickCreateOpen(true)}>
-                Quick Create
+                {he.actions.quickCreate}
               </Button>
             </PermissionGate>
           </>

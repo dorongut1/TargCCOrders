@@ -16,7 +16,6 @@ export interface ProductPriceHist {
   archivedReason: string | null;
   originalPriceId: number | null;
   notes: string | null;
-  addFieldsHere: string | null;
   /** Concurrency control: hash of record state at time of GET */
   _etag?: string;
 }
@@ -34,7 +33,6 @@ export interface CreateProductPriceHistRequest {
   archivedReason?: string | null;
   originalPriceId?: number | null;
   notes?: string | null;
-  addFieldsHere?: string | null;
 }
 
 export type UpdateProductPriceHistRequest = CreateProductPriceHistRequest;
@@ -52,7 +50,6 @@ export const productPriceHistSchema = z.object({
   archivedReason: z.string().max(255).optional().nullable(),
   originalPriceId: z.coerce.number().optional().nullable(),
   notes: z.string().optional().nullable(),
-  addFieldsHere: z.string().max(50).optional().nullable(),
 });
 
 export type ProductPriceHistFormData = z.infer<typeof productPriceHistSchema>;

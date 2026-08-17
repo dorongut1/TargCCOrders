@@ -44,7 +44,7 @@ export const entityRoutes: RouteDefinition[] = [
 
   // ── כספים (Finance) ──
   { path: '/debt-management', label: 'ניהול חובות', entity: 'debtManagement', group: 'כספים', readOnly: false, isComposite: true },
-  { path: '/customerDebts', label: 'חובות לקוחות', entity: 'customerDebt', group: 'כספים', readOnly: false },
+  { path: '/customerDebts', label: 'חובות לקוחות', entity: 'customerDebt', group: 'כספים', readOnly: false, hideInNav: true },
 
   // ── כוורות (Beehive) ──
   { path: '/beehiveBuyerTrackings', label: 'מעקב כוורות', entity: 'beehiveBuyerTracking', group: 'כוורות', readOnly: false },
