@@ -71,6 +71,16 @@ export const UserAdminApi = {
     };
   },
 
+  update: async (id: number, payload: CreateUserPayload) => {
+    const { data } = await api.put(`/userAdmin/users/${id}`, payload);
+    return data as { message: string; user: AdminUser };
+  },
+
+  remove: async (id: number) => {
+    const { data } = await api.delete(`/userAdmin/users/${id}`);
+    return data as { message: string };
+  },
+
   resetPassword: async (id: number) => {
     const { data } = await api.post(`/userAdmin/users/${id}/resetPassword`);
     return data as { message: string; password: string; changed: boolean };

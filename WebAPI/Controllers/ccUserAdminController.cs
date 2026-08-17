@@ -323,6 +323,88 @@ namespace TargCCOrders.WebAPI.Controllers
             return Ok(new { message = $"החסימה של {user.UserName} הוסרה.", user = Project(user) });
         }
 
+        public class UpdateUserRequest
+        {
+            public string UserName { get; set; } = "";
+            public string FirstName { get; set; } = "";
+            public string LastName { get; set; } = "";
+            public string Email { get; set; } = "";
+            public string PhoneNumber { get; set; } = "";
+            public long RoleId { get; set; }
+        }
+
+        [HttpPut("users/{id}")]
+        public ActionResult UpdateUser(long id, [FromBody] UpdateUserRequest request)
+        {
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
+
+            if (!IsUserManager(requester)) return Forbid();
+
+            if (string.IsNullOrWhiteSpace(request?.UserName))
+                return BadRequest(new { message = "שם משתמש הוא שדה חובה." });
+            if (request.RoleId <= 0)
+                return BadRequest(new { message = "יש לבחור תפקיד." });
+
+            var user = new csUser(clsEnums.enmLoadParent.DoNotLoad);
+            var fault = user.GetByID(id, requester, vMustExist: true);
+            if (!fault.isOK) return NotFound(new { message = "המשתמש לא נמצא." });
+
+            // Changing your own role can remove user management from the only
+            // account that has it, and the screen that would undo it is the one
+            // you just locked yourself out of.
+            if (requester.UserID == id && request.RoleId != user.RoleID)
+                return BadRequest(new { message = "לא ניתן לשנות את התפקיד של עצמך. יש לבקש זאת ממנהל אחר." });
+
+            var newName = request.UserName.Trim();
+            if (!string.Equals(newName, user.UserName, StringComparison.OrdinalIgnoreCase))
+            {
+                // Same duplicate check as creation — the DB would otherwise fail
+                // with a raw index error.
+                var other = new csUser(clsEnums.enmLoadParent.DoNotLoad);
+                var lookup = other.GetByUserName(newName, requester);
+                if (lookup != null && lookup.isOK && other.ID > 0 && other.ID != id)
+                    return Conflict(new { message = $"שם המשתמש '{newName}' כבר קיים." });
+            }
+
+            user.UserName = newName;
+            user.FirstName = request.FirstName?.Trim() ?? "";
+            user.LastName = request.LastName?.Trim() ?? "";
+            user.Email = request.Email?.Trim() ?? "";
+            user.PhoneNumber = request.PhoneNumber?.Trim() ?? "";
+            user.RoleID = request.RoleId;
+
+            fault = user.Update(requester);
+            if (!fault.isOK) return BadRequest(new { message = Explain(fault) });
+
+            return Ok(new { message = $"פרטי {user.UserName} עודכנו.", user = Project(user) });
+        }
+
+        [HttpDelete("users/{id}")]
+        public ActionResult DeleteUser(long id)
+        {
+            clsRequester requester;
+            try { requester = RequesterFactory.FromUser(User); }
+            catch (Exception ex) { return Unauthorized(new { message = ex.Message }); }
+
+            if (!IsUserManager(requester)) return Forbid();
+
+            // Deleting yourself ends the session that would let you undo it.
+            if (requester.UserID == id)
+                return BadRequest(new { message = "לא ניתן למחוק את המשתמש שלך." });
+
+            var user = new csUser(clsEnums.enmLoadParent.DoNotLoad);
+            var fault = user.GetByID(id, requester, vMustExist: true);
+            if (!fault.isOK) return NotFound(new { message = "המשתמש לא נמצא." });
+
+            var name = user.UserName;
+            fault = user.Delete(requester);
+            if (!fault.isOK) return BadRequest(new { message = Explain(fault) });
+
+            return Ok(new { message = $"המשתמש {name} נמחק." });
+        }
+
         public class ChangeMyPasswordRequest
         {
             public string CurrentPassword { get; set; } = "";

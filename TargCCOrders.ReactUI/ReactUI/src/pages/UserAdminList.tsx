@@ -9,7 +9,9 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import KeyIcon from '@mui/icons-material/Key';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import { UserAdminApi, type CreateUserPayload } from '../api/UserAdminApi';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { UserAdminApi, type CreateUserPayload, type AdminUser } from '../api/UserAdminApi';
 import { useNotification } from '../contexts/NotificationContext';
 
 const emptyForm: CreateUserPayload = {
@@ -23,6 +25,10 @@ export default function UserAdminList() {
   const [createOpen, setCreateOpen] = useState(false);
   const [form, setForm] = useState<CreateUserPayload>(emptyForm);
   const [banner, setBanner] = useState<string | null>(null);
+  // The edit dialog reuses the create dialog's fields; holding the id being
+  // edited is the only extra state it needs.
+  const [editId, setEditId] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
 
   const { data: me } = useQuery({ queryKey: ['userAdmin', 'me'], queryFn: UserAdminApi.me });
   const { data: users = [], isLoading } = useQuery({
@@ -54,6 +60,40 @@ export default function UserAdminList() {
     },
     onError: (e) => fail(e, 'יצירת המשתמש נכשלה'),
   });
+
+  const updateMut = useMutation({
+    mutationFn: (v: { id: number; payload: CreateUserPayload }) =>
+      UserAdminApi.update(v.id, v.payload),
+    onSuccess: (res) => {
+      setEditId(null);
+      setForm(emptyForm);
+      invalidate();
+      showSuccess(res.message);
+    },
+    onError: (e) => fail(e, 'עדכון המשתמש נכשל'),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: UserAdminApi.remove,
+    onSuccess: (res) => {
+      setDeleteTarget(null);
+      invalidate();
+      showSuccess(res.message);
+    },
+    onError: (e) => { setDeleteTarget(null); fail(e, 'מחיקת המשתמש נכשלה'); },
+  });
+
+  const startEdit = (u: AdminUser) => {
+    setForm({
+      userName: u.userName,
+      firstName: u.firstName ?? '',
+      lastName: u.lastName ?? '',
+      email: u.email ?? '',
+      phoneNumber: u.phoneNumber ?? '',
+      roleId: u.roleId,
+    });
+    setEditId(u.id);
+  };
 
   const resetMut = useMutation({
     mutationFn: UserAdminApi.resetPassword,
@@ -138,6 +178,19 @@ export default function UserAdminList() {
                   </Stack>
                 </TableCell>
                 <TableCell align="center">
+                  <Tooltip title="עריכת פרטים">
+                    <IconButton size="small" onClick={() => startEdit(u)}><EditIcon fontSize="small" /></IconButton>
+                  </Tooltip>
+                  {/* Deleting yourself would end the session that could undo it,
+                      so the button is disabled rather than left to fail server-side. */}
+                  <Tooltip title={u.id === me?.userId ? 'לא ניתן למחוק את המשתמש שלך' : 'מחיקה'}>
+                    <span>
+                      <IconButton size="small" color="error" disabled={u.id === me?.userId}
+                                  onClick={() => setDeleteTarget(u)}>
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
                   <Tooltip title="איפוס סיסמה">
                     <IconButton size="small" onClick={() => resetMut.mutate(u.id)}><KeyIcon fontSize="small" /></IconButton>
                   </Tooltip>
@@ -156,8 +209,12 @@ export default function UserAdminList() {
         </Table>
       </TableContainer>
 
-      <Dialog open={createOpen} onClose={() => setCreateOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>משתמש חדש</DialogTitle>
+      {/* One dialog for both create and edit: the fields are identical, and
+          keeping two copies is how they drift apart. */}
+      <Dialog open={createOpen || editId !== null}
+              onClose={() => { setCreateOpen(false); setEditId(null); setForm(emptyForm); }}
+              maxWidth="sm" fullWidth>
+        <DialogTitle>{editId !== null ? 'עריכת משתמש' : 'משתמש חדש'}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField label="שם משתמש" required value={form.userName}
@@ -176,17 +233,42 @@ export default function UserAdminList() {
               onChange={(e) => setForm({ ...form, roleId: Number(e.target.value) })} fullWidth>
               {roles.map((r) => <MenuItem key={r.id} value={r.id}>{r.name}</MenuItem>)}
             </TextField>
-            <Alert severity="info">
-              הסיסמה ההתחלתית תהיה <strong>1234</strong>. המשתמש יוכל לשנות אותה בעצמו במסך "שינוי סיסמה".
-            </Alert>
+            {editId === null ? (
+              <Alert severity="info">
+                הסיסמה ההתחלתית תהיה <strong>1234</strong>. המשתמש יוכל לשנות אותה בעצמו במסך "שינוי סיסמה".
+              </Alert>
+            ) : editId === me?.userId ? (
+              <Alert severity="warning">
+                לא ניתן לשנות את התפקיד של עצמך — כדי שלא תישאר בלי גישה לניהול המשתמשים.
+              </Alert>
+            ) : null}
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setCreateOpen(false)}>ביטול</Button>
+          <Button onClick={() => { setCreateOpen(false); setEditId(null); setForm(emptyForm); }}>ביטול</Button>
           <Button variant="contained"
-            disabled={!form.userName.trim() || !form.roleId || createMut.isPending}
-            onClick={() => createMut.mutate(form)}>
-            צור משתמש
+            disabled={!form.userName.trim() || !form.roleId || createMut.isPending || updateMut.isPending}
+            onClick={() => editId !== null
+              ? updateMut.mutate({ id: editId, payload: form })
+              : createMut.mutate(form)}>
+            {editId !== null ? 'שמור' : 'צור משתמש'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={deleteTarget !== null} onClose={() => setDeleteTarget(null)} maxWidth="xs" fullWidth>
+        <DialogTitle>מחיקת משתמש</DialogTitle>
+        <DialogContent>
+          <Typography>
+            למחוק את <strong>{deleteTarget?.userName}</strong>
+            {deleteTarget?.fullName ? ` (${deleteTarget.fullName})` : ''}? הפעולה אינה הפיכה.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteTarget(null)}>ביטול</Button>
+          <Button variant="contained" color="error" disabled={deleteMut.isPending}
+            onClick={() => deleteTarget && deleteMut.mutate(deleteTarget.id)}>
+            מחק
           </Button>
         </DialogActions>
       </Dialog>
