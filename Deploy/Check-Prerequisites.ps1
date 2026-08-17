@@ -1,24 +1,32 @@
 ﻿<#
     Check-Prerequisites.ps1 — preflight for the TargCCOrders server
 
-    Run ON THE SERVER, in an elevated PowerShell, BEFORE deploying:
+    Run ON THE SERVER, in an elevated PowerShell, BEFORE deploying.
+
+    Simplest usage — drop this file into the site folder and run it there:
+        cd D:\Webs\Orders.target.co.il
         powershell -ExecutionPolicy Bypass -File .\Check-Prerequisites.ps1
+
+    PublishPath defaults to the folder this script sits in, so nothing needs
+    to be passed when it is placed alongside the application.
 
     Read-only: it inspects and reports, it never installs or changes anything.
 
-    Optional switches:
-        -PublishPath  D:\Apps\TargCCOrders     folder the site will run from
-        -SqlServer    SQLSRV01                 SQL instance to test
+    Optional switches (write them on ONE line, and with no angle brackets):
+        -PublishPath  D:\Webs\Orders.target.co.il
+        -SqlServer    SQLSRV01          or  localhost  when SQL is on this box
         -Database     TargCCOrdersNew
-        -AppPoolName  TargCCOrders
+        -AppPoolName  Orders.target.co.il
 #>
 [CmdletBinding()]
 param(
-    [string]$PublishPath = 'D:\Apps\TargCCOrders',
+    [string]$PublishPath = $PSScriptRoot,
     [string]$SqlServer   = 'localhost',
     [string]$Database    = 'TargCCOrdersNew',
     [string]$AppPoolName = 'TargCCOrders'
 )
+
+if ([string]::IsNullOrWhiteSpace($PublishPath)) { $PublishPath = (Get-Location).Path }
 
 $script:fail = 0
 $script:warn = 0
