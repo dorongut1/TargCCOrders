@@ -238,6 +238,30 @@ icacls "D:\Logs\TargCC" /grant "IIS AppPool\TargCCOrders:(OI)(CI)M"
    `ASPNETCORE_ENVIRONMENT` = `Production`
    (מכבה Swagger, מדליק HSTS ו-HTTPS redirect)
 
+4. **לכבות את WebDAV — חובה.** בלי זה `PUT` ו-`DELETE` מחזירים **405** לכל
+   נקודות הקצה, כולל עריכה ומחיקה של משתמשים. `WebDAVModule` רושם את עצמו
+   כמטפל בשתי הפעולות האלה ועונה **לפני** ש-ASP.NET Core רואה את הבקשה.
+
+   ב-`web.config` של האתר, בתוך `<system.webServer>`:
+
+   ```xml
+   <handlers>
+     <remove name="WebDAV" />
+     <!-- ה-add של aspNetCore נשאר אחרי זה -->
+   </handlers>
+   <modules>
+     <remove name="WebDAVModule" />
+   </modules>
+   ```
+
+   > **למה זה תופס דווקא בייצור:** מקומית האפליקציה רצה על Kestrel, שאין בו
+   > WebDAV, ולכן הכל עובד. התסמין מופיע רק אחרי הפריסה ונראה כמו באג בקוד.
+   > **הבדיקה המבחינה:** `PUT` שמחזיר **401** הגיע לאפליקציה ותקין;
+   > **405** נחסם ב-IIS. אירע 17.8.2026.
+
+   ⚠️ `web.config` אינו נכלל בחבילת הפריסה, ולכן התיקון **שורד פריסות**.
+   אבל אתר שמוקם מאפס יקבל web.config חדש — והתקלה תחזור.
+
 ---
 
 ## שלב 8 — HTTPS
