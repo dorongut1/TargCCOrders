@@ -11,6 +11,12 @@ export interface RouteDefinition {
   isComposite?: boolean;
   /** Hidden from the sidebar navigation (route stays registered for deep links) */
   hideInNav?: boolean;
+  /**
+   * Hand-written page that registers its own route in App.tsx and has no
+   * generated List/Form/View trio. Listed here only so it reaches the sidebar;
+   * the automatic route generation skips it.
+   */
+  standalone?: boolean;
 }
 
 export const sidebarGroups = [
@@ -20,6 +26,7 @@ export const sidebarGroups = [
   'משלוחים',
   'כספים',
   'כוורות',
+  'ניהול',
 ] as const;
 
 export const entityRoutes: RouteDefinition[] = [
@@ -48,6 +55,12 @@ export const entityRoutes: RouteDefinition[] = [
 
   // ── כוורות (Beehive) ──
   { path: '/beehiveBuyerTrackings', label: 'מעקב כוורות', entity: 'beehiveBuyerTracking', group: 'כוורות', readOnly: false },
+
+  // ── ניהול (Administration) ──
+  // The API behind this screen is gated on the AdminUI policy, so a
+  // non-administrator who follows the link gets an empty screen rather than
+  // data. Listed because it was previously reachable only by typing the URL.
+  { path: '/users', label: 'ניהול משתמשים', entity: 'userAdmin', group: 'ניהול', readOnly: false, standalone: true },
 ];
 
 export const getListPath = (entity: string) => `/${entity}`;

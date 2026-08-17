@@ -88,6 +88,10 @@ function lazyPage(name: string) {
 // Build lazy components map
 const pageComponents: Record<string, Record<string, React.LazyExoticComponent<React.ComponentType>>> = {};
 entityRoutes.forEach((r) => {
+  // Standalone pages register their own route below and have no generated
+  // List/Form/View trio to load. Leaving them out here also leaves them out of
+  // the route generation, which keys off this map.
+  if (r.standalone) return;
   const pascal = r.entity.charAt(0).toUpperCase() + r.entity.slice(1);
   pageComponents[r.entity] = {
     List: lazyPage(`${pascal}List`),
