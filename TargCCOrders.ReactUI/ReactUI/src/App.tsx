@@ -73,6 +73,7 @@ import useTranslation from './i18n/useTranslation';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import UserAdminList from './pages/UserAdminList';
+import ParametersList from './pages/ParametersList';
 import ChangeMyPassword from './pages/ChangeMyPassword';
 
 // Lazy-load all page components
@@ -702,6 +703,7 @@ export default function App() {
                 /dashboard rendered a blank page with no console error. */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/users" element={<UserAdminList />} />
+            <Route path="/parameters" element={<ParametersList />} />
             <Route path="/change-password" element={<ChangeMyPassword />} />
             {entityRoutes.map((route) => {
               const comps = pageComponents[route.entity];

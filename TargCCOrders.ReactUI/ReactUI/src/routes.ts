@@ -61,6 +61,7 @@ export const entityRoutes: RouteDefinition[] = [
   // non-administrator who follows the link gets an empty screen rather than
   // data. Listed because it was previously reachable only by typing the URL.
   { path: '/users', label: 'ניהול משתמשים', entity: 'userAdmin', group: 'ניהול', readOnly: false, standalone: true },
+  { path: '/parameters', label: 'ניהול פרמטרים', entity: 'parameters', group: 'ניהול', readOnly: false, standalone: true },
 ];
 
 export const getListPath = (entity: string) => `/${entity}`;
