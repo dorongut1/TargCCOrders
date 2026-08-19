@@ -132,6 +132,17 @@ Public Class clsEnums
     [Shmoolik]
     [Tzofar]
     [WarehouseKQ]
+    ' Appended rather than inserted alphabetically. TargCC used to emit these
+    ' in order, but it no longer runs, and appending leaves every existing
+    ' member's number untouched. Display order comes from the parameters
+    ' screen, so alphabetical order here buys nothing.
+    ' Added 18.8.2026 from the live workbook's settings sheet, which the
+    ' business maintains; without them an imported order carrying one of these
+    ' is read as UD and destroyed on the first save.
+    [Elkana]
+    [YDM]
+    [BeerTuvia]
+    [BGabriel]
   End Enum
   Public Enum enmDeliveryStatus
     UD
@@ -967,6 +978,14 @@ Public Class clsEnums
         pDeliveryMethod = enmDeliveryMethod.Tzofar
       Case "warehousekq"
         pDeliveryMethod = enmDeliveryMethod.WarehouseKQ
+      Case "elkana"
+        pDeliveryMethod = enmDeliveryMethod.Elkana
+      Case "ydm"
+        pDeliveryMethod = enmDeliveryMethod.YDM
+      Case "beertuvia"
+        pDeliveryMethod = enmDeliveryMethod.BeerTuvia
+      Case "bgabriel"
+        pDeliveryMethod = enmDeliveryMethod.BGabriel
       Case Else
         pDeliveryMethod = enmDeliveryMethod.UD
     End Select
@@ -2170,6 +2189,10 @@ Public Module clsEnumsExtensions
       Case clsEnums.enmDeliveryMethod.Shmoolik : Return "Shmoolik" 
       Case clsEnums.enmDeliveryMethod.Tzofar : Return "Tzofar" 
       Case clsEnums.enmDeliveryMethod.WarehouseKQ : Return "WarehouseKQ" 
+      Case clsEnums.enmDeliveryMethod.Elkana : Return "Elkana" 
+      Case clsEnums.enmDeliveryMethod.YDM : Return "YDM" 
+      Case clsEnums.enmDeliveryMethod.BeerTuvia : Return "BeerTuvia" 
+      Case clsEnums.enmDeliveryMethod.BGabriel : Return "BGabriel" 
       Case Else 
         Return "UD" 
     End Select 
