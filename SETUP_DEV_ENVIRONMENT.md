@@ -40,46 +40,58 @@ cd C:\Dev\NonTFS\TargCCOrders; git checkout develop
 
 ---
 
-## 2. ⚠️ מסד הנתונים — נדרש גיבוי, לא סקריפט
+## 2. מסד הנתונים — כנראה כבר יש לך אחד
 
-**זה החלק היחיד שאי אפשר לעשות לבד.** בריפו יש `DB_SCHEMA.sql`, אבל הוא מכיל
-**41 טבלאות ואפס פרוצדורות** — בעוד שב-DB החי יש **831 פרוצדורות**, ובנוסף
-נתוני מערכת חיוניים: `c_Enumeration`, `c_Role`, `c_Permission`, `c_User`.
-בלעדיהם המערכת לא עולה בכלל.
+**אם קיבלת עותק מדורון בעבר — אינך צריך גיבוי חדש.** ה-DB לא נבנה מחדש מאז;
+מה שהשתנה הוא סקריפטים בודדים, וכולם בריפו. הרץ קודם את הבדיקה ותדע בדיוק
+מה חסר לך:
 
-### מה לבקש מדורון
+```bash
+cd C:\Dev\NonTFS\TargCCOrders\Database; sqlcmd -S localhost -d TargCCOrdersNew -E -I -f 65001 -b -i "CHECK_DbState.sql"
+```
 
-קובץ `TargCCOrdersNew.bak`. הוא מפיק אותו כך:
+הוא **קורא בלבד ואינו משנה דבר**, ומדפיס שורה לכל סקריפט:
+
+```
+[ok]   ADD_DeliveryMethods_2026-08-18.sql   already applied (18 rows)
+[RUN]  CREATE_EnumMetadata_2026-08-18.sql   -- table missing
+```
+
+**כל מה שמסומן `[RUN]` — להריץ לפי §4, בסדר שהוא מציג.** מה שמסומן `[ok]` לדלג.
+
+הוא גם מדפיס בדיקת תקינות:
+
+| שורה | מה זה אומר |
+|---|---|
+| `procedures : 831` | תקין. **אם קרוב לאפס — יש לך עותק סכמה בלבד, והוא אינו שמיש** |
+| `clr enabled : 1` | תקין. אם `0` — §3 |
+| `customers : 1312` | הנתונים במקום |
+
+### רק אם אין לך DB בכלל
+
+⚠️ **`DB_SCHEMA.sql` שבריפו לא יביא אותך לשום מקום** — יש בו 41 טבלאות
+ו**אפס פרוצדורות**, בעוד שה-DB החי מכיל **831**, ובנוסף נתוני מערכת
+(`c_Enumeration`, `c_Role`, `c_Permission`, `c_User`) שבלעדיהם המערכת אינה
+עולה כלל. נדרש גיבוי מלא.
+
+דורון מפיק אותו כך:
 
 ```bash
 sqlcmd -S localhost -E -I -b -Q "BACKUP DATABASE [TargCCOrdersNew] TO DISK='C:\Temp\TargCCOrdersNew.bak' WITH INIT, COMPRESSION, STATS=10;"
 ```
 
-⚠️ **הגיבוי מכיל 1,312 לקוחות אמיתיים.** להעביר בשיתוף פנימי
-(`\\mercury\Public\...`) — **לא במייל ולא בענן ציבורי**, ולא להכניס לגיט.
-
-### שחזור אצלך
+ואצלך:
 
 ```bash
 sqlcmd -S localhost -E -I -b -Q "RESTORE DATABASE [TargCCOrdersNew] FROM DISK='C:\Temp\TargCCOrdersNew.bak' WITH REPLACE, RECOVERY, STATS=10;"
 ```
 
-אם הנתיבים הפיזיים שונים אצלך, השחזור ייכשל עם הודעה על `MOVE`. אז:
+אם הנתיבים הפיזיים שונים אצלך השחזור ייכשל עם הודעה על `MOVE`. אז להריץ
+`RESTORE FILELISTONLY FROM DISK='...'` ולחזור על ה-`RESTORE` עם
+`MOVE 'שם_לוגי' TO 'C:\...\file.mdf'` לכל קובץ.
 
-```bash
-sqlcmd -S localhost -E -I -b -Q "RESTORE FILELISTONLY FROM DISK='C:\Temp\TargCCOrdersNew.bak';"
-```
-
-וחזור על ה-`RESTORE` עם `MOVE 'שם_לוגי' TO 'C:\...\file.mdf'` לכל קובץ.
-
-### אימות שהשחזור הצליח
-
-```bash
-sqlcmd -S localhost -d TargCCOrdersNew -E -I -b -h-1 -W -Q "SET NOCOUNT ON; SELECT 'tables=' + CAST(COUNT(*) AS VARCHAR) FROM sys.tables; SELECT 'procedures=' + CAST(COUNT(*) AS VARCHAR) FROM sys.procedures; SELECT 'customers=' + CAST(COUNT(*) AS VARCHAR) FROM Customer;"
-```
-
-**מספרים צפויים:** `tables=41` · `procedures=831` · `customers=1312`
-אם הפרוצדורות אפס — השחזור לא הצליח, אל תמשיך.
+⚠️ **הגיבוי מכיל 1,312 לקוחות אמיתיים.** להעביר בשיתוף פנימי בלבד — לא במייל,
+לא בענן ציבורי, ובשום מקרה לא לגיט.
 
 ---
 
@@ -322,7 +334,7 @@ git status --porcelain | Select-String -Pattern "_token|Database/import/|IMPORT_
 
 1. להתקין את §0
 2. `git clone` + `git checkout develop`
-3. **לבקש מדורון את הגיבוי** ולשחזר (§2) — זה החוסם היחיד
+3. להריץ את `CHECK_DbState.sql` ולהשלים מה שמסומן `[RUN]` (§2)
 4. להפעיל SQLCLR (§3)
 5. להריץ את שני סקריפטי הענף (§4)
 6. `npm install` → `tsc` → `vitest` → `build` (§5)
